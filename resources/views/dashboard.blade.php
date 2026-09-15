@@ -1,233 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@extends('layout.app')
 
-    <title>Dashboard</title>
+@section('title', 'Dashboard')
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+@section('content')
 
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #f5f5f5;
-        }
+<style>
+    .summary-container {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
 
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
+    .summary-card {
+        width: 220px;
+        min-height: 130px;
 
-            width: 240px;
-            height: 100vh;
+        padding: 24px;
 
-            background-color: #ffffff;
-            border-right: 1px solid #ddd;
+        background-color: white;
 
-            display: flex;
-            flex-direction: column;
-        }
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
 
-        .sidebar-title {
-            padding: 25px 20px;
+    .summary-card h3 {
+        margin: 0 0 12px;
 
-            font-size: 24px;
-            font-weight: bold;
+        font-size: 17px;
+        font-weight: 500;
+        color: #666;
+    }
 
-            border-bottom: 1px solid #ddd;
-        }
+    .summary-card p {
+        margin: 0;
 
-        .navigation {
-            padding: 15px 10px;
-        }
+        font-size: 32px;
+        font-weight: 600;
+    }
 
-        .navigation a {
-            display: block;
+    .dashboard-title {
+        margin: 0 0 8px;
 
-            padding: 12px 15px;
-            margin-bottom: 5px;
+        font-size: 36px;
+        font-weight: 600;
+    }
 
-            color: #333;
-            text-decoration: none;
+    .welcome-text {
+        margin: 0 0 35px;
 
-            border-radius: 5px;
+        font-size: 17px;
+        color: #666;
+    }
+</style>
 
-            font-size: 16px;
-        }
+    <h1 class="dashboard-title">
+        Dashboard
+    </h1>
 
-        .navigation a:hover {
-            background-color: #f0f0f0;
-        }
+    <p class="welcome-text">
+        Selamat Datang, {{ Auth::user()->name }}
+    </p>
+    <div class="summary-container">
 
-        .navigation a.active {
-            background-color: #087cf0;
-            color: white;
-        }
-
-        /* Logout */
-        .sidebar-bottom {
-            margin-top: auto;
-            padding: 15px 10px;
-
-            border-top: 1px solid #ddd;
-        }
-
-        .logout-button {
-            width: 100%;
-
-            padding: 12px 15px;
-
-            border: none;
-            border-radius: 5px;
-
-            background-color: #ffffff;
-            color: #333;
-
-            text-align: left;
-            font-size: 16px;
-
-            cursor: pointer;
-        }
-
-        .logout-button:hover {
-            background-color: #f0f0f0;
-        }
-
-        /* Main content */
-        .main-content {
-            margin-left: 240px;
-            padding: 40px;
-        }
-
-        .page-title {
-            margin: 0 0 10px;
-
-            font-size: 30px;
-            font-weight: 400;
-        }
-
-        .welcome-text {
-            margin-bottom: 30px;
-
-            color: #666;
-            font-size: 16px;
-        }
-
-        /* Summary cards */
-        .summary-container {
-            display: flex;
-            gap: 20px;
-
-            flex-wrap: wrap;
-        }
-
-        .summary-card {
-            width: 200px;
-            padding: 20px;
-
-            background-color: white;
-
-            border: 1px solid #ddd;
-            border-radius: 6px;
-        }
-
-        .summary-card h3 {
-            margin: 0 0 10px;
-
-            font-size: 15px;
-            font-weight: normal;
-            color: #666;
-        }
-
-        .summary-card p {
-            margin: 0;
-
-            font-size: 28px;
-            font-weight: bold;
-            color: #222;
-        }
-    </style>
-</head>
-
-<body>
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-
-        <div class="sidebar-title">
-            Presensi
+        <div class="summary-card">
+            <h3>Hadir</h3>
+            <p>0</p>
         </div>
 
-        <nav class="navigation">
-
-            <a href="{{ route('dashboard') }}" class="active">
-                Dashboard
-            </a>
-
-            <a href="{{ route('presensi') }}">
-                Presensi
-            </a>
-
-        </nav>
-
-        <div class="sidebar-bottom">
-
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-
-                <button type="submit" class="logout-button">
-                    Logout
-                </button>
-            </form>
-
+        <div class="summary-card">
+            <h3>Telat</h3>
+            <p>0</p>
         </div>
 
-    </aside>
-
-
-    <!-- Main Content -->
-    <main class="main-content">
-
-        <h1 class="page-title">
-            Dashboard
-        </h1>
-
-        <p class="welcome-text">
-            Welcome, {{ Auth::user()->name }}
-        </p>
-
-
-        <!-- Attendance Summary -->
-        <div class="summary-container">
-
-            <div class="summary-card">
-                <h3>Hadir</h3>
-                <p>0</p>
-            </div>
-
-            <div class="summary-card">
-                <h3>Telat</h3>
-                <p>0</p>
-            </div>
-
-            <div class="summary-card">
-                <h3>Sakit</h3>
-                <p>0</p>
-            </div>
-
-            <div class="summary-card">
-                <h3>Izin</h3>
-                <p>0</p>
-            </div>
-
+        <div class="summary-card">
+            <h3>Sakit</h3>
+            <p>0</p>
         </div>
 
-    </main>
+        <div class="summary-card">
+            <h3>Izin</h3>
+            <p>0</p>
+        </div>
 
-</body>
-</html>
+    </div>
+
+@endsection
