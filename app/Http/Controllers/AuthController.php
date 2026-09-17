@@ -60,6 +60,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'username' => $request->username,
             'password' => $request->password,
+            'role' => 'user',
         ]);
 
     return redirect()->route('login');

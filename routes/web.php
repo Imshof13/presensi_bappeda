@@ -2,35 +2,38 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
-
-Route::get('/register', function () {
-    return view('register');
-})->name('register');
-
-
+// Auth
 Route::get('/', [AuthController::class, 'showLogin'])
+    ->middleware('guest')
     ->name('login');
 
-Route::post('/login', [AuthController::class, 'login']);
-
-Route::post('/logout', [AuthController::class, 'logout'])
-    ->name('logout');
+Route::post('/login', [AuthController::class, 'login'])
+    ->middleware('guest')
+    ->name('login.authenticate');
 
 Route::get('/register', [AuthController::class, 'showRegister'])
+    ->middleware('guest')
     ->name('register');
 
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'register'])
+    ->middleware('guest');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')
-->name('dashboard');
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
 
-Route::get('/presensi', function () {
-    return view('presensi');
-})->middleware('auth')
-->name('presensi');
+// USER
+Route::middleware('auth')->group(function () {
+    
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
+
+    Route::get('/presensi', function () {
+        return view('presensi');
+    })->name('presensi');
+
+});
+
+
