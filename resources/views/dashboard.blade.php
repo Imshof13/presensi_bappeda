@@ -24,8 +24,8 @@
     }
 
     .summary-card {
-        width: 220px;
-        min-height: 130px;
+        width: 283px;
+        min-height: 150px;
         padding: 24px;
         background-color: white;
         border: 1px solid #ddd;
