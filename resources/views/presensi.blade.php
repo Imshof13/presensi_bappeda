@@ -47,7 +47,7 @@
         border: none;
         border-radius: 7px;
 
-        background-color: #9915da;
+        background-color: #087cf0;
         color: white;
 
         font-family: 'Poppins', sans-serif;

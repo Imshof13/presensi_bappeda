@@ -89,16 +89,36 @@ class PresensiController extends Controller
         $note = null;
 
         if ($now->lt($deadline)) {
+            $minutesEarly = (int) round($now->diffInMinutes($deadline));
 
-            $minutesEarly = $now->diffInMinutes($deadline);
+            if ($minutesEarly >= 60) {
+                $hours = intdiv($minutesEarly, 60);
+                $minutes = $minutesEarly % 60;
 
-            $note = "Keluar {$minutesEarly} menit lebih cepat";
+                if ($minutes > 0) {
+                    $note = "Keluar {$hours} jam {$minutes} menit lebih cepat";
+                } else {
+                    $note = "Keluar {$hours} jam lebih cepat";
+                }
+            } else {
+                $note = "Keluar {$minutesEarly} menit lebih cepat";
+            }
 
         } elseif ($now->gt($deadline)) {
+            $minutesLate = (int) round($deadline->diffInMinutes($now));
 
-            $minutesLate = $deadline->diffInMinutes($now);
+            if ($minutesLate >= 60) {
+                $hours = intdiv($minutesLate, 60);
+                $minutes = $minutesLate % 60;
 
-            $note = "Keluar lebih lama {$minutesLate} menit";
+                if ($minutes > 0) {
+                    $note = "Keluar lebih lama {$hours} jam {$minutes} menit";
+                } else {
+                    $note = "Keluar lebih lama {$hours} jam";
+                }
+            } else {
+                $note = "Keluar lebih lama {$minutesLate} menit";
+            }
         }
 
         $presensi->update([
