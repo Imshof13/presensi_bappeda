@@ -14,6 +14,19 @@ class PresensiController extends Controller
     {
         $user = Auth::user();
 
+        $presensiLama = Presensi::where('user_id', $user->id)
+            ->where('date', '<', today())
+            ->whereNull('check_out')
+            ->get();
+
+        foreach ($presensiLama as $data) {
+            if (!$data->note) {
+                $data->update([
+                    'note' => 'Tidak melakukan check out',
+                ]);
+            }
+        }
+
         $presensi = Presensi::where('user_id', $user->id)
             ->where('date', today())
             ->first();
