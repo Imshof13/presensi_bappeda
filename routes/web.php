@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\PengajuanController;
 
 // Auth
 Route::get('/', [AuthController::class, 'showLogin'])
@@ -39,6 +40,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/presensi/check-out', [PresensiController::class, 'checkOut'])
         ->name('presensi.checkOut');
+    
+    Route::post('/pengajuan', [PengajuanController::class, 'store'])
+        ->name('pengajuan.store');
 
 });
 

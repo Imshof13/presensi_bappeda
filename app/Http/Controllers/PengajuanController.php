@@ -9,28 +9,53 @@ use Illuminate\Support\Facades\Auth;
 class PengajuanController extends Controller
 {
     //
-    public function create()
-    {
-        return view('pengajuan.create');
-    }
-
     public function store(Request $request)
     {
-        // We'll implement this later
-    }
+        $request->validate([
+            'tanggal' => [
+                'required',
+                'date',
+            ],
 
-    public function index()
-    {
-        // We'll implement this later
-    }
+            'mengajukan' => [
+                'required',
+                'in:sakit,izin',
+            ],
 
-    public function approve($id)
-    {
-        // We'll implement this later
-    }
+            'alasan' => [
+                'nullable',
+                'string',
+            ],
 
-    public function reject($id)
-    {
-        // We'll implement this later
+            'bukti' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png',
+                'max:2048',
+            ],
+        ]);
+
+        $bukti = null;
+
+        if ($request->hasFile('bukti')) {
+            $bukti = $request->file('bukti')
+                ->store('bukti-pengajuan', 'public');
+        }
+
+        Pengajuan::create([
+            'user_id' => Auth::id(),
+            'tanggal' => $request->tanggal,
+            'mengajukan' => $request->mengajukan,
+            'alasan' => $request->alasan,
+            'bukti' => $bukti,
+            'status' => 'pending',
+            'dicek_oleh' => null,
+            'dicek_saat' => null,
+        ]);
+
+        return back()->with(
+            'success',
+            'Pengajuan berhasil dikirim kepada admin.'
+        );
     }
 }
