@@ -4,8 +4,6 @@
 
 @section('content')
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=notifications" />
-
 <style>
     .dashboard-header {
         display: flex;
@@ -211,14 +209,6 @@
         color: #721c24;
     }
 
-    .material-symbols-outlined {
-        font-variation-settings:
-        'FILL' 0,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 24
-    }
-
     .notification-button {
         position: relative;
         width: 45px;
@@ -262,8 +252,11 @@
 
     .notification-modal-content,
     .pengajuan-detail-content {
-        width: 500px;
-        max-width: calc(100% - 40px);
+        width: 780px;
+        max-width: calc(100% - 60px);
+        min-height: 440px;
+        display: flex;
+        flex-direction: column;
         background-color: white;
         border-radius: 10px;
         overflow: hidden;
@@ -273,7 +266,7 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        padding: 22px 24px;
+        padding: 28px 32px;
         border-bottom: 1px solid #eee;
     }
 
@@ -286,7 +279,7 @@
     .notification-modal-header p {
         margin: 5px 0 0;
         color: #777;
-        font-size: 13px;
+        font-size: 15px;
     }
 
     .notification-close {
@@ -302,7 +295,7 @@
     }
 
     .notification-list {
-        max-height: 350px;
+        max-height: 300px;
         overflow-y: auto;
     }
 
@@ -310,7 +303,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 16px 24px;
+        padding: 20px 32px;
         border-bottom: 1px solid #eee;
         cursor: pointer;
     }
@@ -322,25 +315,25 @@
     .notification-item-info {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 5px;
     }
 
     .notification-item-info strong {
-        font-size: 14px;
+        font-size: 15px;
     }
 
     .notification-item-info span {
         color: #777;
-        font-size: 12px;
+        font-size: 15px;
     }
 
     .notification-item > i {
         color: #aaa;
-        font-size: 12px;
+        font-size: 15px;
     }
 
     .notification-empty {
-        padding: 35px 20px;
+        padding: 45px 20px;
         text-align: center;
         color: #777;
     }
@@ -353,49 +346,118 @@
 
     .notification-empty p {
         margin: 0;
-        font-size: 14px;
+        font-size: 15px;
     }
 
     .notification-modal-footer {
         display: flex;
         justify-content: flex-end;
-        padding: 16px 24px;
+        align-items: center;
+        gap: 10px;
+        margin-top: auto;
+        padding: 20px 32px;
         border-top: 1px solid #eee;
     }
 
-    .view-all-button {
-        padding: 10px 16px;
+    .view-all-button,
+    .back-button {
+        padding: 12px 20px;
         border-radius: 6px;
-        background-color: #2563eb;
-        color: white;
-        font-size: 13px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 15px;
         font-weight: 500;
         text-decoration: none;
+        cursor: pointer;
+    }
+
+    .view-all-button {
+        border: none;
+        background-color: #2563eb;
+        color: white;
     }
 
     .view-all-button:hover {
         background-color: #1d4ed8;
     }
 
+    .back-button {
+        border: 1px solid #ccc;
+        background-color: white;
+        color: #444;
+    }
+
+    .back-button:hover {
+        background-color: #f5f5f5;
+    }
+
     .pengajuan-detail {
-        padding: 20px 24px;
+        flex: 1;
+        padding: 28px 32px;
+        overflow-y: auto;
     }
 
     .detail-row {
         display: flex;
         flex-direction: column;
         gap: 5px;
-        margin-bottom: 18px;
+        margin-bottom: 22px;
     }
 
     .detail-row span {
         color: #777;
-        font-size: 12px;
+        font-size: 15px;
     }
 
     .detail-row strong {
         color: #222;
-        font-size: 14px;
+        font-size: 15px;
+    }
+
+    .detail-proof {
+        margin-top: 5px;
+    }
+
+    .detail-proof-image {
+        display: block;
+        max-width: 100%;
+        max-height: 260px;
+        border: 1px solid #ddd;
+        border-radius: 7px;
+        object-fit: contain;
+    }
+
+    .detail-proof-link {
+        display: inline-block;
+        margin-top: 8px;
+        color: #2563eb;
+        font-size: 15px;
+        text-decoration: none;
+    }
+
+    .detail-proof-link:hover {
+        text-decoration: underline;
+    }
+
+    .no-proof {
+        color: #777;
+        font-size: 15px;
+    }
+
+    @media (max-width: 700px) {
+        .notification-modal-content,
+        .pengajuan-detail-content {
+            width: calc(100% - 30px);
+            max-width: none;
+            min-height: 400px;
+        }
+
+        .notification-modal-header,
+        .notification-item,
+        .notification-modal-footer,
+        .pengajuan-detail {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
     }
 </style>
 
@@ -415,10 +477,7 @@
             type="button"
             class="notification-button"
             onclick="openNotificationModal()">
-
-            <span class="material-symbols-outlined">
-                notifications
-            </span>
+            <i class="fa-solid fa-bell"></i>
 
             @if($pendingPengajuan > 0)
                 <span class="notification-dot"></span>
@@ -627,7 +686,8 @@
                         @js($pengajuan->user->name),
                         @js($pengajuan->tanggal->format('d-m-Y')),
                         @js(ucfirst($pengajuan->mengajukan)),
-                        @js($pengajuan->alasan ?? '-')
+                        @js($pengajuan->alasan ?? '-'),
+                        @js($pengajuan->bukti ?? '')
                     )">
 
                     <div class="notification-item-info">
@@ -728,9 +788,45 @@
                     -
                 </strong>
             </div>
+
+            <div class="detail-row">
+                <span>
+                    Bukti
+                </span>
+
+                <div id="detailProof" class="detail-proof">
+                    <span class="no-proof">
+                        Tidak ada bukti dilampirkan.
+                    </span>
+
+                    <img
+                        id="detailProofImage"
+                        class="detail-proof-image"
+                        src=""
+                        alt="Bukti pengajuan"
+                        style="display: none;">
+
+                    <a
+                        id="detailProofLink"
+                        class="detail-proof-link"
+                        href="#"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style="display: none;">
+                        Buka bukti
+                    </a>
+                </div>
+            </div>
         </div>
 
         <div class="notification-modal-footer">
+            <button
+                type="button"
+                class="back-button"
+                onclick="backToNotificationModal()">
+                Kembali
+            </button>
+
             <a
                 href="{{ route('presensi') }}"
                 class="view-all-button">
@@ -765,7 +861,8 @@ function showPengajuanDetail(
     user,
     date,
     type,
-    reason
+    reason,
+    bukti
 ) {
 
     document.getElementById('detailUser').textContent = user;
@@ -776,14 +873,47 @@ function showPengajuanDetail(
 
     document.getElementById('detailReason').textContent = reason;
 
+    const proofImage = document.getElementById('detailProofImage');
+    const proofLink = document.getElementById('detailProofLink');
+    const noProof = document.querySelector('#detailProof .no-proof');
 
-    // Close notification list
+    if (bukti) {
+        const proofUrl = '{{ asset('storage') }}/' + bukti;
+
+        proofImage.src = proofUrl;
+        proofImage.style.display = 'block';
+
+        proofLink.href = proofUrl;
+        proofLink.style.display = 'inline-block';
+
+        noProof.style.display = 'none';
+    } else {
+        proofImage.src = '';
+        proofImage.style.display = 'none';
+
+        proofLink.href = '#';
+        proofLink.style.display = 'none';
+
+        noProof.style.display = 'inline';
+    }
+
     closeNotificationModal();
 
-
-    // Open detail
     document
         .getElementById('pengajuanDetailModal')
+        .classList.add('active');
+
+}
+
+
+function backToNotificationModal() {
+
+    document
+        .getElementById('pengajuanDetailModal')
+        .classList.remove('active');
+
+    document
+        .getElementById('notificationModal')
         .classList.add('active');
 
 }
