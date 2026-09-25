@@ -178,8 +178,18 @@
     }
 
     .check-in-button {
+        background-color: #2563eb;
+        color: white;
+    }
+
+    .check-in-button:hover {
+        background-color: #1d4ed8;
+    }
+
+    .check-in-button:disabled {
         background-color: #eef2f7;
         color: #9aa6b5;
+        cursor: not-allowed;
     }
 
     .check-out-button {

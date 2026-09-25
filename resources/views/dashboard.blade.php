@@ -4,7 +4,16 @@
 
 @section('content')
 
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=notifications" />
+
 <style>
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 35px;
+    }
+
     .dashboard-title {
         margin: 0 0 8px;
         font-size: 36px;
@@ -201,15 +210,222 @@
         background-color: #f8d7da;
         color: #721c24;
     }
+
+    .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+
+    .notification-button {
+        position: relative;
+        width: 45px;
+        height: 45px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: white;
+        color: #555;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .notification-button:hover {
+        background-color: #f5f5f5;
+    }
+
+    .notification-dot {
+        position: absolute;
+        top: 7px;
+        right: 7px;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background-color: #dc3545;
+        border: 2px solid white;
+    }
+
+    .notification-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        inset: 0;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.45);
+    }
+
+    .notification-modal.active {
+        display: flex;
+    }
+
+    .notification-modal-content,
+    .pengajuan-detail-content {
+        width: 500px;
+        max-width: calc(100% - 40px);
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .notification-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 22px 24px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .notification-modal-header h2 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .notification-modal-header p {
+        margin: 5px 0 0;
+        color: #777;
+        font-size: 13px;
+    }
+
+    .notification-close {
+        border: none;
+        background: none;
+        color: #777;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    .notification-close:hover {
+        color: #333;
+    }
+
+    .notification-list {
+        max-height: 350px;
+        overflow-y: auto;
+    }
+
+    .notification-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 24px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+    }
+
+    .notification-item:hover {
+        background-color: #f8f9fc;
+    }
+
+    .notification-item-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .notification-item-info strong {
+        font-size: 14px;
+    }
+
+    .notification-item-info span {
+        color: #777;
+        font-size: 12px;
+    }
+
+    .notification-item > i {
+        color: #aaa;
+        font-size: 12px;
+    }
+
+    .notification-empty {
+        padding: 35px 20px;
+        text-align: center;
+        color: #777;
+    }
+
+    .notification-empty i {
+        margin-bottom: 10px;
+        color: #35a66f;
+        font-size: 25px;
+    }
+
+    .notification-empty p {
+        margin: 0;
+        font-size: 14px;
+    }
+
+    .notification-modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        padding: 16px 24px;
+        border-top: 1px solid #eee;
+    }
+
+    .view-all-button {
+        padding: 10px 16px;
+        border-radius: 6px;
+        background-color: #2563eb;
+        color: white;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .view-all-button:hover {
+        background-color: #1d4ed8;
+    }
+
+    .pengajuan-detail {
+        padding: 20px 24px;
+    }
+
+    .detail-row {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 18px;
+    }
+
+    .detail-row span {
+        color: #777;
+        font-size: 12px;
+    }
+
+    .detail-row strong {
+        color: #222;
+        font-size: 14px;
+    }
 </style>
 
-<h1 class="dashboard-title">
-    Dashboard
-</h1>
+<div class="dashboard-header">
+    <div>
+        <h1 class="dashboard-title">
+            Dashboard
+        </h1>
 
-<p class="welcome-text">
-    Selamat Datang, {{ Auth::user()->name }}
-</p>
+        <p class="welcome-text">
+            Selamat Datang, {{ Auth::user()->name }}
+        </p>
+    </div>
+
+    @if(auth()->user()->role === 'admin')
+        <button
+            type="button"
+            class="notification-button"
+            onclick="openNotificationModal()">
+
+            <span class="material-symbols-outlined">
+                notifications
+            </span>
+
+            @if($pendingPengajuan > 0)
+                <span class="notification-dot"></span>
+            @endif
+        </button>
+    @endif
+</div>
 
 <div class="summary-container">
 
@@ -370,4 +586,233 @@
         </table>
     </div>
 </div>
+
+@if(auth()->user()->role === 'admin')
+
+<div
+    id="notificationModal"
+    class="notification-modal">
+
+    <div class="notification-modal-content">
+
+        <div class="notification-modal-header">
+
+            <div>
+                <h2>
+                    Pengajuan Menunggu
+                </h2>
+
+                <p>
+                    {{ $pendingPengajuan }} pengajuan menunggu pemeriksaan.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="notification-close"
+                onclick="closeNotificationModal()">
+                ×
+            </button>
+
+        </div>
+
+        <div class="notification-list">
+
+            @forelse($pengajuans as $pengajuan)
+
+                <div
+                    class="notification-item"
+                    onclick="showPengajuanDetail(
+                        {{ $pengajuan->id }},
+                        @js($pengajuan->user->name),
+                        @js($pengajuan->tanggal->format('d-m-Y')),
+                        @js(ucfirst($pengajuan->mengajukan)),
+                        @js($pengajuan->alasan ?? '-')
+                    )">
+
+                    <div class="notification-item-info">
+
+                        <strong>
+                            {{ $pengajuan->user->name }}
+                        </strong>
+
+                        <span>
+                            {{ ucfirst($pengajuan->mengajukan) }}
+                            ·
+                            {{ $pengajuan->tanggal->format('d-m-Y') }}
+                        </span>
+
+                    </div>
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                </div>
+            @empty
+                <div class="notification-empty">
+
+                    <i class="fa-solid fa-check"></i>
+
+                    <p>
+                        Tidak ada pengajuan yang menunggu.
+                    </p>
+                </div>
+            @endforelse
+        </div>
+
+        <div class="notification-modal-footer">
+            <a
+                href="{{ route('presensi') }}"
+                class="view-all-button">
+                Lihat Semua Pengajuan
+            </a>
+        </div>
+    </div>
+</div>
+
+<div
+    id="pengajuanDetailModal"
+    class="notification-modal">
+
+    <div class="pengajuan-detail-content">
+        <div class="notification-modal-header">
+
+            <h2>
+                Detail Pengajuan
+            </h2>
+
+            <button
+                type="button"
+                class="notification-close"
+                onclick="closePengajuanDetail()">
+                ×
+            </button>
+        </div>
+
+        <div class="pengajuan-detail">
+            <div class="detail-row">
+                <span>
+                    Pengguna
+                </span>
+
+                <strong id="detailUser">
+                    -
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>
+                    Tanggal
+                </span>
+
+                <strong id="detailDate">
+                    -
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>
+                    Jenis Pengajuan
+                </span>
+
+                <strong id="detailType">
+                    -
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>
+                    Alasan
+                </span>
+
+                <strong id="detailReason">
+                    -
+                </strong>
+            </div>
+        </div>
+
+        <div class="notification-modal-footer">
+            <a
+                href="{{ route('presensi') }}"
+                class="view-all-button">
+                Buka Halaman Presensi
+            </a>
+        </div>
+    </div>
+</div>
+
+@endif
 @endsection
+
+<script>
+    function openNotificationModal() {
+
+    document
+        .getElementById('notificationModal')
+        .classList.add('active');
+
+}
+
+function closeNotificationModal() {
+
+    document
+        .getElementById('notificationModal')
+        .classList.remove('active');
+
+}
+
+function showPengajuanDetail(
+    id,
+    user,
+    date,
+    type,
+    reason
+) {
+
+    document.getElementById('detailUser').textContent = user;
+
+    document.getElementById('detailDate').textContent = date;
+
+    document.getElementById('detailType').textContent = type;
+
+    document.getElementById('detailReason').textContent = reason;
+
+
+    // Close notification list
+    closeNotificationModal();
+
+
+    // Open detail
+    document
+        .getElementById('pengajuanDetailModal')
+        .classList.add('active');
+
+}
+
+
+function closePengajuanDetail() {
+
+    document
+        .getElementById('pengajuanDetailModal')
+        .classList.remove('active');
+
+}
+
+window.addEventListener('click', function(event) {
+
+    const notificationModal =
+        document.getElementById('notificationModal');
+
+    const detailModal =
+        document.getElementById('pengajuanDetailModal');
+
+
+    if (event.target === notificationModal) {
+        closeNotificationModal();
+    }
+
+    if (event.target === detailModal) {
+        closePengajuanDetail();
+    }
+
+});
+</script>

@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Presensi;
+use App\Models\Pengajuan;
+
 class DashboardController extends Controller
 {
     //
     public function index(Request $request)
     {
         $user = Auth::user();
+        $pendingPengajuan = 0;
+        $pengajuans = collect();
 
         // Admin
         if ($user->role === 'admin') {
@@ -37,6 +41,14 @@ class DashboardController extends Controller
                 $presensis = $presensis
                     ->latest('date')
                     ->get();
+                
+            $pendingPengajuan = Pengajuan::where('status', 'pending')
+                ->count();
+
+            $pengajuans = Pengajuan::with('user')
+                ->where('status', 'pending')
+                ->latest('created_at')
+                ->get();
 
         // User 
         } else {
@@ -61,7 +73,9 @@ class DashboardController extends Controller
 
             return view('dashboard', compact(
                 'summary',
-                'presensis'
+                'presensis',
+                'pendingPengajuan',
+                'pengajuans'
             ));
     }
 }

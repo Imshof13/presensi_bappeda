@@ -29,18 +29,13 @@
 
     .navigation a {
         display: block;
-
         padding: 18px 20px;
         margin-bottom: 10px;
-
         color: #333;
         text-decoration: none;
-
         border-radius: 7px;
-
         font-size: 18px;
         font-weight: 500;
-
         transition: background-color 0.2s, color 0.2s;
     }
 
@@ -119,7 +114,5 @@
                 Logout
             </button>
         </form>
-
     </div>
-
 </aside>
