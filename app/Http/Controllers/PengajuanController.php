@@ -58,4 +58,26 @@ class PengajuanController extends Controller
             'Pengajuan berhasil dikirim kepada admin.'
         );
     }
+
+    public function accept(Pengajuan $pengajuan)
+    {
+        $pengajuan->update([
+            'status' => 'diterima',
+            'dicek_oleh' => Auth::id(),
+            'dicek_saat' => now(),
+        ]);
+
+        return back()->with('success', 'Pengajuan berhasil diterima.');
+    }
+
+    public function reject(Pengajuan $pengajuan)
+    {
+        $pengajuan->update([
+            'status' => 'ditolak',
+            'dicek_oleh' => Auth::id(),
+            'dicek_saat' => now(),
+        ]);
+
+        return back()->with('success', 'Pengajuan berhasil ditolak.');
+    }
 }

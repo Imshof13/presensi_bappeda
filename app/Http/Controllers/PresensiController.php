@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Presensi;
+use App\Models\Pengajuan;
 
 class PresensiController extends Controller
 {
@@ -13,6 +14,14 @@ class PresensiController extends Controller
     public function index()
     {
         $user = Auth::user();
+            if ($user->role === 'admin') {
+
+                $pengajuans = Pengajuan::with('user')
+                    ->latest('created_at')
+                    ->get();
+
+                return view('presensi', compact('pengajuans'));
+            }
 
         $presensiLama = Presensi::where('user_id', $user->id)
             ->where('date', '<', today())
@@ -141,4 +150,6 @@ class PresensiController extends Controller
 
         return back()->with('success', 'Presensi pulang berhasil.');
     }
+
+
 }

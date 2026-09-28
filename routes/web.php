@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\PengajuanController;
 
+
 // Auth
 Route::get('/', [AuthController::class, 'showLogin'])
     ->middleware('guest')
@@ -26,24 +27,34 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
-// USER
+// User
 Route::middleware('auth')->group(function () {
-    
+
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
     Route::get('/presensi', [PresensiController::class, 'index'])
         ->name('presensi');
-    
+
     Route::post('/presensi/check-in', [PresensiController::class, 'checkIn'])
         ->name('presensi.checkIn');
 
     Route::post('/presensi/check-out', [PresensiController::class, 'checkOut'])
         ->name('presensi.checkOut');
-    
+
+    // pengajuan
     Route::post('/pengajuan', [PengajuanController::class, 'store'])
         ->name('pengajuan.store');
+});
 
+// Admin
+Route::middleware(['auth', 'admin'])->group(function () {
+
+    Route::patch('/pengajuan/{pengajuan}/accept', [PengajuanController::class, 'accept'])
+        ->name('pengajuan.accept');
+
+    Route::patch('/pengajuan/{pengajuan}/reject', [PengajuanController::class, 'reject'])
+        ->name('pengajuan.reject');
 });
 
 
