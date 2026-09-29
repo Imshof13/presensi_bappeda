@@ -39,8 +39,10 @@ class DashboardController extends Controller
                 }
 
                 $presensis = $presensis
-                    ->latest('date')
-                    ->get();
+                    ->orderByDesc('date')
+                    ->orderByDesc('id')
+                    ->paginate(10)
+                    ->withQueryString();
                 
             $pendingPengajuan = Pengajuan::where('status', 'pending')
                 ->count();
@@ -67,8 +69,10 @@ class DashboardController extends Controller
                 }
 
                 $presensis = $presensis
-                    ->latest('date')
-                    ->get();
+                    ->orderByDesc('date')
+                    ->orderByDesc('id')
+                    ->paginate(10)
+                    ->withQueryString();
             }
 
             return view('dashboard', compact(

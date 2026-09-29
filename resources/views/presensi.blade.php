@@ -1249,7 +1249,7 @@
 
     function openPengajuanModal() {
         document
-            .getElementById('pengajuanModal')
+            .getElementById('pengajuanModal') 
             .classList.add('active');
     }
 

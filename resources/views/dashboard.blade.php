@@ -459,6 +459,72 @@
             padding-right: 20px;
         }
     }
+
+    .pagination-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 24px;
+    }
+
+    .pagination-info {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .pagination-buttons {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .pagination-button {
+        min-width: 38px;
+        height: 38px;
+        padding: 0 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: white;
+        color: #374151;
+        font-size: 14px;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .pagination-button:hover:not(.disabled):not(.active) {
+        border-color: #2563eb;
+        color: #2563eb;
+    }
+
+    .pagination-button.active {
+        background: #2563eb;
+        border-color: #2563eb;
+        color: white;
+        font-weight: 600;
+    }
+
+    .pagination-button.disabled {
+        color: #c4c4c4;
+        background: #f9fafb;
+        cursor: not-allowed;
+    }
+
+    @media (max-width: 600px) {
+        .pagination-container {
+            justify-content: center;
+        }
+
+        .pagination-info {
+            width: 100%;
+            text-align: center;
+        }
+    }
 </style>
 
 <div class="dashboard-header">
@@ -643,6 +709,49 @@
                 @endforelse
             </tbody>
         </table>
+        @if($presensis->hasPages())
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Menampilkan {{ $presensis->firstItem() }}
+                – {{ $presensis->lastItem() }}
+                dari {{ $presensis->total() }} data
+            </div>
+
+            <div class="pagination-buttons">
+                {{-- Previous page --}}
+                @if($presensis->onFirstPage())
+                    <span class="pagination-button disabled">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </span>
+                @else
+                    <a href="{{ $presensis->previousPageUrl() }}"
+                    class="pagination-button">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                @endif
+
+                {{-- Page numbers --}}
+                @foreach($presensis->getUrlRange(1, $presensis->lastPage()) as $page => $url)
+                    <a href="{{ $url }}"
+                    class="pagination-button {{ $presensis->currentPage() === $page ? 'active' : '' }}">
+                        {{ $page }}
+                    </a>
+                @endforeach
+
+                {{-- Next page --}}
+                @if($presensis->hasMorePages())
+                    <a href="{{ $presensis->nextPageUrl() }}"
+                    class="pagination-button">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                @else
+                    <span class="pagination-button disabled">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </span>
+                @endif
+            </div>
+        </div>
+    @endif
     </div>
 </div>
 
