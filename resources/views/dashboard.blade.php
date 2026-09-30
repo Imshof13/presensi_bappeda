@@ -660,6 +660,7 @@
                     <th>Pulang</th>
                     <th>Status</th>
                     <th>Keterangan</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
 
@@ -696,6 +697,16 @@
 
                         <td>
                             {{ $presensi->note ?? '-' }}
+                        </td>
+
+                        <td>
+                            <button
+                                type="button"
+                                class="detail-button"
+                                onclick="openPresensiDetail({{ $presensi->id }})">
+                                <i class="fa-solid fa-eye"></i>
+                                Detail
+                            </button>
                         </td>
                     </tr>
                 @empty
