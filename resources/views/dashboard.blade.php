@@ -525,6 +525,60 @@
             text-align: center;
         }
     }
+
+    .presensi-detail-content {
+        width: 600px;
+        max-width: calc(100% - 60px);
+        min-height: 440px;
+
+        display: flex;
+        flex-direction: column;
+
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .detail-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+
+        padding: 9px 14px;
+
+        border: none;
+        border-radius: 7px;
+
+        background-color: #2563eb;
+        color: white;
+
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+
+        cursor: pointer;
+
+        transition: 0.2s;
+    }
+
+    .detail-button:hover {
+        background-color: #1d4ed8;
+    }
+
+    .presensi-detail-content .detail-row {
+        margin-bottom: 22px;
+    }
+
+    .presensi-detail-content .detail-row:last-child {
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 700px) {
+        .presensi-detail-content {
+            width: calc(100% - 30px);
+            max-width: none;
+        }
+    }
 </style>
 
 <div class="dashboard-header">
@@ -536,6 +590,67 @@
         <p class="welcome-text">
             Selamat Datang, {{ Auth::user()->name }}
         </p>
+    </div>
+
+    <div
+        id="presensiDetailModal"
+        class="notification-modal">
+        <div class="presensi-detail-content">
+
+            <div class="notification-modal-header">
+                <h2>Detail Presensi</h2>
+
+                <button
+                    type="button"
+                    class="notification-close"
+                    onclick="closePresensiDetail()">
+                    ×
+                </button>
+            </div>
+
+            <div class="pengajuan-detail">
+
+                <div class="detail-row">
+                    <span>Nama</span>
+                    <strong id="presensiDetailName">-</strong>
+                </div>
+
+                <div class="detail-row">
+                    <span>Tanggal</span>
+                    <strong id="presensiDetailDate">-</strong>
+                </div>
+
+                <div class="detail-row">
+                    <span>Masuk</span>
+                    <strong id="presensiDetailCheckIn">-</strong>
+                </div>
+
+                <div class="detail-row">
+                    <span>Pulang</span>
+                    <strong id="presensiDetailCheckOut">-</strong>
+                </div>
+
+                <div class="detail-row">
+                    <span>Status</span>
+                    <strong id="presensiDetailStatus">-</strong>
+                </div>
+
+                <div class="detail-row">
+                    <span>Keterangan</span>
+                    <strong id="presensiDetailNote">-</strong>
+                </div>
+
+            </div>
+
+            <div class="notification-modal-footer">
+                <button
+                    type="button"
+                    class="back-button"
+                    onclick="closePresensiDetail()">
+                    Tutup
+                </button>
+            </div>
+        </div>
     </div>
 
     @if(auth()->user()->role === 'admin')
@@ -703,7 +818,13 @@
                             <button
                                 type="button"
                                 class="detail-button"
-                                onclick="openPresensiDetail({{ $presensi->id }})">
+                                onclick="openPresensiDetail(this)"
+                                data-name="{{ auth()->user()->role === 'admin' ? $presensi->user->name : auth()->user()->name }}"
+                                data-date="{{ $presensi->date->format('d-m-Y') }}"
+                                data-check-in="{{ $presensi->check_in ?? '-' }}"
+                                data-check-out="{{ $presensi->check_out ?? '-' }}"
+                                data-status="{{ ucfirst($presensi->status ?? '-') }}"
+                                data-note="{{ $presensi->note ?? '-' }}">
                                 <i class="fa-solid fa-eye"></i>
                                 Detail
                             </button>
@@ -712,7 +833,7 @@
                 @empty
                     <tr>
                         <td
-                            colspan="{{ auth()->user()->role === 'admin' ? 6 : 5 }}"
+                            colspan="{{ auth()->user()->role === 'admin' ? 7 : 6 }}"
                             class="empty-data">
                             Tidak ada data presensi ditemukan.
                         </td>
@@ -1065,4 +1186,34 @@ window.addEventListener('click', function(event) {
     }
 
 });
+
+function openPresensiDetail(button) {
+    document.getElementById('presensiDetailName').textContent =
+        button.dataset.name;
+
+    document.getElementById('presensiDetailDate').textContent =
+        button.dataset.date;
+
+    document.getElementById('presensiDetailCheckIn').textContent =
+        button.dataset.checkIn;
+
+    document.getElementById('presensiDetailCheckOut').textContent =
+        button.dataset.checkOut;
+
+    document.getElementById('presensiDetailStatus').textContent =
+        button.dataset.status;
+
+    document.getElementById('presensiDetailNote').textContent =
+        button.dataset.note;
+
+    document
+        .getElementById('presensiDetailModal')
+        .classList.add('active');
+}
+
+function closePresensiDetail() {
+    document
+        .getElementById('presensiDetailModal')
+        .classList.remove('active');
+}
 </script>
