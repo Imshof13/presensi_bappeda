@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Pengajuan;
 
 class Presensi extends Model
 {
@@ -28,5 +29,13 @@ class Presensi extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function PengajuanDiterima()
+    {
+        return Pengajuan::where('user_id', $this->user_id)
+            ->whereDate('tanggal', $this->date)
+            ->where('status', 'diterima')
+            ->first();
     }
 }

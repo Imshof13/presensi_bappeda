@@ -38,13 +38,10 @@
 
         .login-container h1 {
             text-align: center;
-
             font-size: 32px;
             font-weight: 400;
-
             margin: 0 0 30px;
             margin-top: 20px;
-
             color: #111;
         }
 
@@ -55,14 +52,10 @@
         .form-group input {
             width: 100%;
             height: 52px;
-
             padding: 0 13px;
-
             font-size: 20px;
-
             border: 1px solid #ccc;
             border-radius: 3px;
-
             background-color: #fff;
         }
 
@@ -74,16 +67,12 @@
         .login-button {
             width: 100%;
             height: 52px;
-
             border: none;
             border-radius: 3px;
-
             background-color: #087cf0;
             color: white;
-
             font-size: 19px;
             font-weight: bold;
-
             cursor: pointer;
         }
 
@@ -115,14 +104,10 @@
 </head>
 
 <body>
-
     <div class="login-container">
-
         <h1>Login</h1>
-
         <form method="POST" action="{{ route('login.authenticate') }}">
             @csrf
-
             <div class="form-group">
                 <input
                     type="text"

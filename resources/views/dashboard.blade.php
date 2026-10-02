@@ -424,6 +424,62 @@
         border: 1px solid #ddd;
         border-radius: 7px;
         object-fit: contain;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .detail-proof-image:hover {
+        opacity: 0.9;
+    }
+
+    .proof-image-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        padding: 50px;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .proof-image-modal.active {
+        display: flex;
+    }
+
+    .proof-large-image {
+        display: block;
+        width: auto;
+        height: auto;
+        max-width: calc(100vw - 120px);
+        max-height: calc(100vh - 120px);
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .proof-image-close {
+        position: absolute;
+        top: 20px;
+        right: 25px;
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #333;
+        font-size: 20px;
+        cursor: pointer;
+        z-index: 10001;
+    }
+
+    .proof-image-close:hover {
+        background-color: white;
     }
 
     .detail-proof-link {
@@ -455,8 +511,10 @@
         .notification-item,
         .notification-modal-footer,
         .pengajuan-detail {
-            padding-left: 20px;
-            padding-right: 20px;
+            flex: 1;
+            min-height: 0;
+            padding: 28px 32px;
+            overflow-y: auto;
         }
     }
 
@@ -528,12 +586,11 @@
 
     .presensi-detail-content {
         width: 600px;
-        max-width: calc(100% - 60px);
-        min-height: 440px;
-
+        max-width: calc(100% - 40px);
+        height: 80vh;
+        max-height: calc(100vh - 40px);
         display: flex;
         flex-direction: column;
-
         background-color: white;
         border-radius: 10px;
         overflow: hidden;
@@ -577,8 +634,27 @@
         .presensi-detail-content {
             width: calc(100% - 30px);
             max-width: none;
+            height: 80vh;
+            max-height: calc(100vh - 30px);
+        }
+    
+    @media (max-width: 600px) {
+        .proof-image-modal {
+            padding: 60px 20px 20px;
+        }
+
+        .proof-large-image {
+            max-width: calc(100vw - 40px);
+            max-height: calc(100vh - 80px);
+        }
+
+        .proof-image-close {
+            top: 12px;
+            right: 12px;
         }
     }
+}
+    
 </style>
 
 <div class="dashboard-header">
@@ -640,6 +716,23 @@
                     <strong id="presensiDetailNote">-</strong>
                 </div>
 
+                <div class="detail-row">
+                    <span>Bukti</span>
+
+                    <div id="presensiDetailProof" class="detail-proof">
+                        <span id="presensiNoProof" class="no-proof">
+                            Tidak ada bukti dilampirkan.
+                        </span>
+
+                        <img
+                            id="presensiDetailProofImage"
+                            class="detail-proof-image"
+                            src=""
+                            alt="Bukti presensi"
+                            style="display: none;"
+                            onclick="openPresensiProof()">
+                    </div>
+                </div>
             </div>
 
             <div class="notification-modal-footer">
@@ -651,6 +744,25 @@
                 </button>
             </div>
         </div>
+    </div>
+
+    <div
+        id="presensiProofModal"
+        class="proof-image-modal"
+        onclick="closePresensiProof()">
+        <button
+            type="button"
+            class="proof-image-close"
+            onclick="closePresensiProof()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <img
+            id="presensiProofLargeImage"
+            class="proof-large-image"
+            src=""
+            alt="Bukti presensi"
+            onclick="event.stopPropagation()">
     </div>
 
     @if(auth()->user()->role === 'admin')
@@ -824,7 +936,8 @@
                                 data-check-in="{{ $presensi->check_in ?? '-' }}"
                                 data-check-out="{{ $presensi->check_out ?? '-' }}"
                                 data-status="{{ ucfirst($presensi->status ?? '-') }}"
-                                data-note="{{ $presensi->note ?? '-' }}">
+                                data-note="{{ $presensi->note ?? '-' }}"
+                                data-bukti="{{ $presensi->PengajuanDiterima()?->bukti ?? '' }}">
                                 <i class="fa-solid fa-eye"></i>
                                 Detail
                             </button>
@@ -862,7 +975,6 @@
                     </a>
                 @endif
 
-                {{-- Page numbers --}}
                 @foreach($presensis->getUrlRange(1, $presensis->lastPage()) as $page => $url)
                     <a href="{{ $url }}"
                     class="pagination-button {{ $presensis->currentPage() === $page ? 'active' : '' }}">
@@ -870,7 +982,6 @@
                     </a>
                 @endforeach
 
-                {{-- Next page --}}
                 @if($presensis->hasMorePages())
                     <a href="{{ $presensis->nextPageUrl() }}"
                     class="pagination-button">
@@ -1206,14 +1317,58 @@ function openPresensiDetail(button) {
     document.getElementById('presensiDetailNote').textContent =
         button.dataset.note;
 
+    const proofImage =
+    document.getElementById('presensiDetailProofImage');
+
+    const noProof =
+        document.getElementById('presensiNoProof');
+
+    if (button.dataset.bukti) {
+        const proofUrl =
+            '{{ asset('storage') }}/' + button.dataset.bukti;
+
+        proofImage.src = proofUrl;
+        proofImage.style.display = 'block';
+        noProof.style.display = 'none';
+
+    } else {
+        proofImage.src = '';
+        proofImage.style.display = 'none';
+        noProof.style.display = 'inline';
+    }
+    
     document
         .getElementById('presensiDetailModal')
+        .classList.add('active');
+}
+
+function openPresensiProof() {
+    const image =
+        document.getElementById('presensiDetailProofImage');
+
+    const largeImage =
+        document.getElementById('presensiProofLargeImage');
+
+    if (!image.src) {
+        return;
+    }
+
+    largeImage.src = image.src;
+
+    document
+        .getElementById('presensiProofModal')
         .classList.add('active');
 }
 
 function closePresensiDetail() {
     document
         .getElementById('presensiDetailModal')
+        .classList.remove('active');
+}
+
+function closePresensiProof() {
+    document
+        .getElementById('presensiProofModal')
         .classList.remove('active');
 }
 </script>

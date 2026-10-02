@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Presensi;
 
 class PengajuanController extends Controller
 {
@@ -67,7 +68,23 @@ class PengajuanController extends Controller
             'dicek_saat' => now(),
         ]);
 
-        return back()->with('success', 'Pengajuan berhasil diterima.');
+        Presensi::updateOrCreate(
+            [
+                'user_id' => $pengajuan->user_id,
+                'date' => $pengajuan->tanggal,
+            ],
+            [
+                'status' => $pengajuan->mengajukan,
+                'check_in' => null,
+                'check_out' => null,
+                'note' => $pengajuan->alasan,
+            ]
+        );
+
+        return back()->with(
+            'success',
+            'Pengajuan berhasil diterima dan data presensi telah dibuat.'
+        );
     }
 
     public function reject(Pengajuan $pengajuan)

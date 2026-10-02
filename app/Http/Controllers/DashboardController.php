@@ -71,7 +71,7 @@ class DashboardController extends Controller
                 $presensis = $presensis
                     ->orderByDesc('date')
                     ->orderByDesc('id')
-                    ->paginate(10)
+                    ->paginate(5)
                     ->withQueryString();
             }
 
