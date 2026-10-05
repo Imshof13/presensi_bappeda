@@ -655,6 +655,42 @@
     }
 }
     
+    .sortable-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+
+        color: inherit;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .sortable-header:hover {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .sortable-header i {
+        margin-left: 8px;
+        font-size: 12px;
+    }
+
+    .sortable-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        width: 100%;
+        height: 100%;
+        min-height: 40px;
+
+        color: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
 </style>
 
 <div class="dashboard-header">
@@ -876,18 +912,86 @@
 
     <div class="attendance-table-container">
 
+        @php
+            $currentSortBy = request('sort_by', 'date');
+            $currentSort = request('sort', 'desc');
+
+            $nextNameSort = ($currentSortBy === 'name' && $currentSort === 'asc')
+                ? 'desc'
+                : 'asc';
+
+            $nextDateSort = ($currentSortBy === 'date' && $currentSort === 'asc')
+                ? 'desc'
+                : 'asc';
+        @endphp
+
         <table class="attendance-table">
+            @php
+                $currentSortBy = request('sort_by', 'date');
+                $currentSort = request('sort', 'desc');
+
+                $nextNameSort = ($currentSortBy === 'name' && $currentSort === 'asc')
+                    ? 'desc'
+                    : 'asc';
+
+                $nextDateSort = ($currentSortBy === 'date' && $currentSort === 'asc')
+                    ? 'desc'
+                    : 'asc';
+            @endphp
+
             <thead>
                 <tr>
+
                     @if(auth()->user()->role === 'admin')
-                        <th>Nama</th>
+                        <th>
+                            <a
+                                href="{{ request()->fullUrlWithQuery([
+                                    'sort_by' => 'name',
+                                    'sort' => $nextNameSort,
+                                    'page' => 1
+                                ]) }}"
+                                class="sortable-header"
+                            >
+                                <span>Nama</span>
+
+                                @if($currentSortBy === 'name')
+                                    @if($currentSort === 'asc')
+                                        <i class="fa-solid fa-arrow-up"></i>
+                                    @else
+                                        <i class="fa-solid fa-arrow-down"></i>
+                                    @endif
+                                @endif
+                            </a>
+                        </th>
                     @endif
-                    <th>Tanggal</th>
+
+                    <th>
+                        <a
+                            href="{{ request()->fullUrlWithQuery([
+                                'sort_by' => 'date',
+                                'sort' => $nextDateSort,
+                                'page' => 1
+                            ]) }}"
+                            class="sortable-header"
+                        >
+                            <span>Tanggal</span>
+
+                            @if($currentSortBy === 'date')
+                                @if($currentSort === 'asc')
+                                    <i class="fa-solid fa-arrow-up"></i>
+                                @else
+                                    <i class="fa-solid fa-arrow-down"></i>
+                                @endif
+                            @endif
+                        </a>
+                    </th>
+
                     <th>Masuk</th>
                     <th>Pulang</th>
                     <th>Status</th>
                     <th>Keterangan</th>
                     <th>Aksi</th>
+
                 </tr>
             </thead>
 
