@@ -519,24 +519,26 @@
     }
 
     .pagination-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 16px;
-        margin-top: 24px;
-    }
-
-    .pagination-info {
-        font-size: 14px;
-        color: #666;
+        position: relative;
+        width: 100%;
+        margin-top: 20px;
+        min-height: 40px;
+        margin-bottom: 20px;
     }
 
     .pagination-buttons {
         display: flex;
+        justify-content: center;
         align-items: center;
-        flex-wrap: wrap;
         gap: 6px;
+    }
+
+    .pagination-info {
+        position: absolute;
+        left: calc(50% + 150px);
+        top: 50%;
+        transform: translateY(-50%);
+        white-space: nowrap;
     }
 
     .pagination-button {
@@ -572,6 +574,7 @@
         background: #f9fafb;
         cursor: not-allowed;
     }
+    
 
     @media (max-width: 600px) {
         .pagination-container {
@@ -600,21 +603,15 @@
         display: inline-flex;
         align-items: center;
         gap: 7px;
-
         padding: 9px 14px;
-
         border: none;
         border-radius: 7px;
-
         background-color: #2563eb;
         color: white;
-
         font-family: 'Poppins', sans-serif;
         font-size: 14px;
         font-weight: 500;
-
         cursor: pointer;
-
         transition: 0.2s;
     }
 
@@ -661,7 +658,6 @@
         justify-content: space-between;
         width: 100%;
         height: 100%;
-
         color: inherit;
         text-decoration: none;
         cursor: pointer;
@@ -681,11 +677,9 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-
         width: 100%;
         height: 100%;
         min-height: 40px;
-
         color: inherit;
         text-decoration: none;
         cursor: pointer;
@@ -816,7 +810,6 @@
 </div>
 
 <div class="summary-container">
-
     <div class="summary-card">
         <h3>Hadir</h3>
         <p>{{ $summary['hadir'] ?? 0 }}</p>
