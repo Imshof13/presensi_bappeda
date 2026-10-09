@@ -685,6 +685,48 @@
         cursor: pointer;
         box-sizing: border-box;
     }
+
+    .export-buttons {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .export-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        padding: 10px 16px;
+
+        border-radius: 7px;
+
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+
+        transition: 0.2s;
+    }
+
+    .export-pdf {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .export-pdf:hover {
+        background-color: #c82333;
+        color: white;
+    }
+
+    .export-excel {
+        background-color: #198754;
+        color: white;
+    }
+
+    .export-excel:hover {
+        background-color: #157347;
+        color: white;
+    }
 </style>
 
 <div class="dashboard-header">
@@ -917,6 +959,28 @@
                 ? 'desc'
                 : 'asc';
         @endphp
+
+        @if(auth()->user()->role === 'admin')
+            <div class="export-buttons">
+
+                <a
+                    href="{{ route('presensi.export.pdf', request()->query()) }}"
+                    class="export-button export-pdf"
+                >
+                    <i class="fa-solid fa-file-pdf"></i>
+                    Export PDF
+                </a>
+
+                <a
+                    href="{{ route('presensi.export.excel', request()->query()) }}"
+                    class="export-button export-excel"
+                >
+                    <i class="fa-solid fa-file-excel"></i>
+                    Export Excel
+                </a>
+
+            </div>
+        @endif
 
         <table class="attendance-table">
             @php

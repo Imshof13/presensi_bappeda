@@ -55,6 +55,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::patch('/pengajuan/{pengajuan}/reject', [PengajuanController::class, 'reject'])
         ->name('pengajuan.reject');
+    
+    Route::get('/presensi/export/excel', [DashboardController::class, 'exportExcel'])
+        ->name('presensi.export.excel');
+
+    Route::get('/presensi/export/pdf', [DashboardController::class, 'exportPdf'])
+        ->name('presensi.export.pdf');
 });
 
 

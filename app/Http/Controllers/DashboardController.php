@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Presensi;
 use App\Models\Pengajuan;
+use App\Exports\PresensiExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DashboardController extends Controller
 {
@@ -126,5 +129,51 @@ class DashboardController extends Controller
             'pendingPengajuan',
             'pengajuans'
         ));
+    }
+
+    public function exportExcel(Request $request)
+    {
+        return Excel::download(
+            new PresensiExport($request),
+            'laporan-presensi.xlsx'
+        );
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $query = Presensi::with('user');
+
+        // Search nama
+        if ($request->filled('search')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where(
+                    'name',
+                    'like',
+                    '%' . $request->search . '%'
+                );
+            });
+        }
+
+        // Filter status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter tanggal
+        if ($request->filled('date')) {
+            $query->whereDate('date', $request->date);
+        }
+
+        $presensis = $query
+            ->orderByDesc('date')
+            ->get();
+
+        $pdf = Pdf::loadView('pdf.presensi', [
+            'presensis' => $presensis,
+        ]);
+
+        return $pdf
+            ->setPaper('a4', 'landscape')
+            ->download('laporan-presensi.pdf');
     }
 }
