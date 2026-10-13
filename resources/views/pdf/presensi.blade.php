@@ -39,12 +39,38 @@
         .center {
             text-align: center;
         }
+
+        .filter-information {
+            margin-bottom: 18px;
+            font-size: 10px;
+        }
+
+        .filter-information p {
+            margin: 4px 0;
+        }
     </style>
 </head>
 
 <body>
 
     <h2>Laporan Presensi Pegawai</h2>
+
+    <div class="filter-information">
+        <p>
+            <strong>Filter Nama:</strong>
+            {{ $filters['search'] ?: 'Semua' }}
+        </p>
+
+        <p>
+            <strong>Filter Status:</strong>
+            {{ $filters['status'] ? ucfirst($filters['status']) : 'Semua' }}
+        </p>
+
+        <p>
+            <strong>Filter Tanggal:</strong>
+            {{ $filters['date'] ?: 'Semua' }}
+        </p>
+    </div>
 
     <table>
         <thead>

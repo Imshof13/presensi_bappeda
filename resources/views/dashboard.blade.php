@@ -727,6 +727,45 @@
         background-color: #157347;
         color: white;
     }
+
+    .filter-export-row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .filter-form {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .filter-controls {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .export-buttons {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+        margin: 0 0 0 auto;
+    }
+
+    @media (max-width: 900px) {
+        .filter-export-row {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .export-buttons {
+            margin-left: 0;
+        }
+    }
 </style>
 
 <div class="dashboard-header">
@@ -885,13 +924,10 @@
         </h2>
     </div>
 
-    <div class="filter-container">
-        <form method="GET" action="{{ route('dashboard') }}">
-
+    <div class="filter-export-row">
+        <form method="GET" action="{{ route('dashboard') }}" class="filter-form">
             @if(auth()->user()->role === 'admin')
-
                 <div class="search-container">
-
                     <input
                         type="text"
                         name="search"
@@ -901,9 +937,8 @@
                 </div>
             @endif
 
-            <div class="filter-row">
+            <div class="filter-controls">
                 <select name="status" class="filter-select">
-
                     <option value="">Semua Status</option>
 
                     <option value="hadir"
@@ -943,6 +978,23 @@
                 </a>
             </div>
         </form>
+
+        @if(auth()->user()->role === 'admin')
+            <div class="export-buttons">
+                <a href="{{ route('presensi.export.pdf', request()->query()) }}"
+                class="export-button export-pdf">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    Export PDF
+                </a>
+
+                <a href="{{ route('presensi.export.excel', request()->query()) }}"
+                class="export-button export-excel">
+                    <i class="fa-solid fa-file-excel"></i>
+                    Export Excel
+                </a>
+            </div>
+        @endif
+
     </div>
 
     <div class="attendance-table-container">
@@ -960,28 +1012,6 @@
                 : 'asc';
         @endphp
 
-        @if(auth()->user()->role === 'admin')
-            <div class="export-buttons">
-
-                <a
-                    href="{{ route('presensi.export.pdf', request()->query()) }}"
-                    class="export-button export-pdf"
-                >
-                    <i class="fa-solid fa-file-pdf"></i>
-                    Export PDF
-                </a>
-
-                <a
-                    href="{{ route('presensi.export.excel', request()->query()) }}"
-                    class="export-button export-excel"
-                >
-                    <i class="fa-solid fa-file-excel"></i>
-                    Export Excel
-                </a>
-
-            </div>
-        @endif
-
         <table class="attendance-table">
             @php
                 $currentSortBy = request('sort_by', 'date');
@@ -998,7 +1028,6 @@
 
             <thead>
                 <tr>
-
                     @if(auth()->user()->role === 'admin')
                         <th>
                             <a
@@ -1007,8 +1036,7 @@
                                     'sort' => $nextNameSort,
                                     'page' => 1
                                 ]) }}"
-                                class="sortable-header"
-                            >
+                                class="sortable-header">
                                 <span>Nama</span>
 
                                 @if($currentSortBy === 'name')
@@ -1029,8 +1057,7 @@
                                 'sort' => $nextDateSort,
                                 'page' => 1
                             ]) }}"
-                            class="sortable-header"
-                        >
+                            class="sortable-header">
                             <span>Tanggal</span>
 
                             @if($currentSortBy === 'date')
@@ -1048,7 +1075,6 @@
                     <th>Status</th>
                     <th>Keterangan</th>
                     <th>Aksi</th>
-
                 </tr>
             </thead>
 

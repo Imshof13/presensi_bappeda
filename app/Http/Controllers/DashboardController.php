@@ -170,6 +170,11 @@ class DashboardController extends Controller
 
         $pdf = Pdf::loadView('pdf.presensi', [
             'presensis' => $presensis,
+            'filters' => [
+                'search' => $request->input('search'),
+                'status' => $request->input('status'),
+                'date' => $request->input('date'),
+            ],
         ]);
 
         return $pdf
