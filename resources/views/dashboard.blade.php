@@ -689,22 +689,18 @@
     .export-buttons {
         display: flex;
         gap: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 40px;
     }
 
     .export-button {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-
         padding: 10px 16px;
-
         border-radius: 7px;
-
         text-decoration: none;
         font-size: 14px;
         font-weight: 500;
-
         transition: 0.2s;
     }
 
@@ -754,6 +750,8 @@
         gap: 10px;
         flex-shrink: 0;
         margin: 0 0 0 auto;
+        padding-bottom: 0;
+        transform: translateY(-1px);
     }
 
     @media (max-width: 900px) {
@@ -763,7 +761,7 @@
         }
 
         .export-buttons {
-            margin-left: 0;
+            justify-content: flex-start;
         }
     }
 </style>
@@ -924,77 +922,78 @@
         </h2>
     </div>
 
-    <div class="filter-export-row">
-        <form method="GET" action="{{ route('dashboard') }}" class="filter-form">
-            @if(auth()->user()->role === 'admin')
-                <div class="search-container">
+    <div class="filter-container">
+        <div class="filter-export-row">
+            <form method="GET" action="{{ route('dashboard') }}" class="filter-form">
+                @if(auth()->user()->role === 'admin')
+                    <div class="search-container">
+                        <input
+                            type="text"
+                            name="search"
+                            class="search-input"
+                            placeholder="Cari nama pegawai..."
+                            value="{{ request('search') }}">
+                    </div>
+                @endif
+
+                <div class="filter-controls">
+                    <select name="status" class="filter-select">
+                        <option value="">Semua Status</option>
+
+                        <option value="hadir"
+                            {{ request('status') === 'hadir' ? 'selected' : '' }}>
+                            Hadir
+                        </option>
+
+                        <option value="terlambat"
+                            {{ request('status') === 'terlambat' ? 'selected' : '' }}>
+                            Terlambat
+                        </option>
+
+                        <option value="sakit"
+                            {{ request('status') === 'sakit' ? 'selected' : '' }}>
+                            Sakit
+                        </option>
+
+                        <option value="izin"
+                            {{ request('status') === 'izin' ? 'selected' : '' }}>
+                            Izin
+                        </option>
+                    </select>
+
                     <input
-                        type="text"
-                        name="search"
-                        class="search-input"
-                        placeholder="Cari nama pegawai..."
-                        value="{{ request('search') }}">
+                        type="date"
+                        name="date"
+                        class="filter-date"
+                        value="{{ request('date') }}">
+
+                    <button type="submit" class="filter-button">
+                        Cari
+                    </button>
+                    <a
+                        href="{{ route('dashboard') }}"
+                        class="reset-button">
+                        Reset
+                    </a>
+
+                    @if(auth()->user()->role === 'admin')
+                        <div class="export-buttons">
+                            <a href="{{ route('presensi.export.pdf', request()->query()) }}"
+                            class="export-button export-pdf">
+                                <i class="fa-solid fa-file-pdf"></i>
+                                Export PDF
+                            </a>
+
+                            <a href="{{ route('presensi.export.excel', request()->query()) }}"
+                            class="export-button export-excel">
+                                <i class="fa-solid fa-file-excel"></i>
+                                Export Excel
+                            </a>
+                        </div>
+                    @endif
                 </div>
-            @endif
-
-            <div class="filter-controls">
-                <select name="status" class="filter-select">
-                    <option value="">Semua Status</option>
-
-                    <option value="hadir"
-                        {{ request('status') === 'hadir' ? 'selected' : '' }}>
-                        Hadir
-                    </option>
-
-                    <option value="terlambat"
-                        {{ request('status') === 'terlambat' ? 'selected' : '' }}>
-                        Terlambat
-                    </option>
-
-                    <option value="sakit"
-                        {{ request('status') === 'sakit' ? 'selected' : '' }}>
-                        Sakit
-                    </option>
-
-                    <option value="izin"
-                        {{ request('status') === 'izin' ? 'selected' : '' }}>
-                        Izin
-                    </option>
-                </select>
-
-                <input
-                    type="date"
-                    name="date"
-                    class="filter-date"
-                    value="{{ request('date') }}">
-
-                <button type="submit" class="filter-button">
-                    Cari
-                </button>
-                <a
-                    href="{{ route('dashboard') }}"
-                    class="reset-button">
-                    Reset
-                </a>
-            </div>
-        </form>
-
-        @if(auth()->user()->role === 'admin')
-            <div class="export-buttons">
-                <a href="{{ route('presensi.export.pdf', request()->query()) }}"
-                class="export-button export-pdf">
-                    <i class="fa-solid fa-file-pdf"></i>
-                    Export PDF
-                </a>
-
-                <a href="{{ route('presensi.export.excel', request()->query()) }}"
-                class="export-button export-excel">
-                    <i class="fa-solid fa-file-excel"></i>
-                    Export Excel
-                </a>
-            </div>
-        @endif
-
+            </form>
+        </div>
     </div>
 
     <div class="attendance-table-container">
