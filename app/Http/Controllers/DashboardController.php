@@ -15,21 +15,41 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+
         $pendingPengajuan = 0;
         $pengajuans = collect();
+        $years = Presensi::selectRaw('YEAR(date) as year')
+            ->distinct()
+            ->orderByDesc('year')
+            ->pluck('year');
 
-        // Sorting
-        $sortBy = $request->input('sort_by', 'date');
-        $sort = $request->input('sort', 'desc');
+        // Validate date range
+        $request->validate([
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+        ]);
 
-        // Prevent invalid sorting values
-        if (!in_array($sortBy, ['name', 'date'])) {
-            $sortBy = 'date';
+        // Sorting options
+        $sort = $request->input('sort', 'date_desc');
+
+        $allowedSorts = [
+            'date_desc',
+            'date_asc',
+            'name_asc',
+            'name_desc',
+        ];
+
+        if (!in_array($sort, $allowedSorts)) {
+            $sort = 'date_desc';
         }
 
-        if (!in_array($sort, ['asc', 'desc'])) {
-            $sort = 'desc';
-        }
+        // Validasi filter
+        $request->validate([
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+            'month' => 'nullable|integer|between:1,12',
+            'year' => 'nullable|integer|digits:4',
+        ]);
 
         // Admin
         if ($user->role === 'admin') {
@@ -45,12 +65,26 @@ class DashboardController extends Controller
                 $presensis->where('status', $request->status);
             }
 
-            // Filter date
-            if ($request->filled('date')) {
-                $presensis->whereDate('date', $request->date);
+            // Filter bulan
+            if ($request->filled('month')) {
+                $presensis->whereMonth('date', $request->month);
             }
 
-            // Search name
+            // Filter tahun
+            if ($request->filled('year')) {
+                $presensis->whereYear('date', $request->year);
+            }
+
+            // Filter rentang tanggal
+            if ($request->filled('date_from')) {
+                $presensis->where('date', '>=', $request->date_from);
+            }
+
+            if ($request->filled('date_to')) {
+                $presensis->where('date', '<=', $request->date_to);
+            }
+
+            // Search employee name
             if ($request->filled('search')) {
                 $presensis->whereHas('user', function ($query) use ($request) {
                     $query->where(
@@ -61,27 +95,29 @@ class DashboardController extends Controller
                 });
             }
 
-            // Sorting
-            if ($sortBy === 'name') {
+            // Sorting Admin
+            if ($sort === 'name_asc' || $sort === 'name_desc') {
+
+                $direction = $sort === 'name_asc' ? 'asc' : 'desc';
 
                 $presensis
-                    ->join(
-                        'users',
-                        'presensis.user_id',
-                        '=',
-                        'users.id'
-                    )
+                    ->join('users', 'presensis.user_id', '=', 'users.id')
                     ->select('presensis.*')
-                    ->orderBy('users.name', $sort);
+                    ->orderBy('users.name', $direction);
+
+            } elseif ($sort === 'date_asc') {
+
+                $presensis
+                    ->orderBy('presensis.date', 'asc')
+                    ->orderBy('presensis.id', 'asc');
 
             } else {
 
                 $presensis
-                    ->orderBy('presensis.date', $sort)
-                    ->orderBy('presensis.id', $sort);
+                    ->orderBy('presensis.date', 'desc')
+                    ->orderBy('presensis.id', 'desc');
             }
 
-            // Pagination
             $presensis = $presensis
                 ->paginate(10)
                 ->withQueryString();
@@ -110,15 +146,31 @@ class DashboardController extends Controller
                 $presensis->where('status', $request->status);
             }
 
-            // Filter date
-            if ($request->filled('date')) {
-                $presensis->where('date', $request->date);
+            // Filter bulan
+            if ($request->filled('month')) {
+                $presensis->whereMonth('date', $request->month);
+            }
+
+            // Filter tahun
+            if ($request->filled('year')) {
+                $presensis->whereYear('date', $request->year);
+            }
+
+            // Filter rentang tanggal
+            if ($request->filled('date_from')) {
+                $presensis->where('date', '>=', $request->date_from);
+            }
+
+            if ($request->filled('date_to')) {
+                $presensis->where('date', '<=', $request->date_to);
             }
 
             // User can only sort by date
+            $direction = $sort === 'date_asc' ? 'asc' : 'desc';
+
             $presensis = $presensis
-                ->orderBy('date', $sort)
-                ->orderBy('id', $sort)
+                ->orderBy('date', $direction)
+                ->orderBy('id', $direction)
                 ->paginate(10)
                 ->withQueryString();
         }
@@ -127,7 +179,8 @@ class DashboardController extends Controller
             'summary',
             'presensis',
             'pendingPengajuan',
-            'pengajuans'
+            'pengajuans',
+            'years'
         ));
     }
 
@@ -143,7 +196,7 @@ class DashboardController extends Controller
     {
         $query = Presensi::with('user');
 
-        // Search nama
+        // Search name
         if ($request->filled('search')) {
             $query->whereHas('user', function ($q) use ($request) {
                 $q->where(
@@ -159,21 +212,66 @@ class DashboardController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Filter tanggal
-        if ($request->filled('date')) {
-            $query->whereDate('date', $request->date);
+        // Filter status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
         }
 
-        $presensis = $query
-            ->orderByDesc('date')
-            ->get();
+        // Filter bulan
+        if ($request->filled('month')) {
+            $query->whereMonth('date', $request->month);
+        }
+
+        // Filter tahun
+        if ($request->filled('year')) {
+            $query->whereYear('date', $request->year);
+        }
+
+        // Filter rentang tanggal
+        if ($request->filled('date_from')) {
+            $query->where('date', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->where('date', '<=', $request->date_to);
+        }
+
+        // Sorting
+        $sort = $request->input('sort', 'date_desc');
+
+        if ($sort === 'name_asc' || $sort === 'name_desc') {
+
+            $direction = $sort === 'name_asc' ? 'asc' : 'desc';
+
+            $query
+                ->join('users', 'presensis.user_id', '=', 'users.id')
+                ->select('presensis.*')
+                ->orderBy('users.name', $direction);
+
+        } elseif ($sort === 'date_asc') {
+
+            $query
+                ->orderBy('presensis.date', 'asc')
+                ->orderBy('presensis.id', 'asc');
+
+        } else {
+
+            $query
+                ->orderBy('presensis.date', 'desc')
+                ->orderBy('presensis.id', 'desc');
+        }
+
+        $presensis = $query->get();
 
         $pdf = Pdf::loadView('pdf.presensi', [
             'presensis' => $presensis,
             'filters' => [
                 'search' => $request->input('search'),
                 'status' => $request->input('status'),
-                'date' => $request->input('date'),
+                'month' => $request->input('month'),
+                'year' => $request->input('year'),
+                'date_from' => $request->input('date_from'),
+                'date_to' => $request->input('date_to'),
             ],
         ]);
 

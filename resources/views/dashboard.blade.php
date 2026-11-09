@@ -93,13 +93,6 @@
         border-color: #087cf0;
     }
 
-    .filter-row {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
     .filter-select,
     .filter-date {
         padding: 12px 14px;
@@ -146,6 +139,222 @@
 
     .reset-button:hover {
         background-color: #f5f5f5;
+    }
+
+    /* Toolbar filter: dua baris */
+    .filter-export-row {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .filter-form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .search-toolbar,
+    .filter-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .search-toolbar .search-container {
+        flex: 1;
+        min-width: 0;
+        margin-bottom: 0;
+    }
+
+    .search-toolbar .search-input {
+        width: 100%;
+    }
+
+    .search-toolbar .filter-button,
+    .search-toolbar .reset-button,
+    .filter-modal-button {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    .filter-modal-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 18px;
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        background-color: white;
+        color: #444;
+        font-family: 'Poppins', sans-serif;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    .filter-modal-button:hover {
+        background-color: #f5f5f5;
+    }
+
+    .sort-select {
+        width: 240px;
+        max-width: 100%;
+        flex-shrink: 0;
+    }
+
+    .export-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-left: auto;
+        flex-shrink: 0;
+    }
+
+    .filter-toolbar .export-spacer {
+        flex: 1;
+    }
+
+    /* Modal filter presensi */
+    .attendance-filter-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.45);
+    }
+
+    .attendance-filter-modal.active {
+        display: flex;
+    }
+
+    .attendance-filter-content {
+        display: flex;
+        flex-direction: column;
+        width: 520px;
+        max-width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    .attendance-filter-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 24px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .attendance-filter-header h2 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .attendance-filter-header p {
+        margin: 5px 0 0;
+        color: #777;
+        font-size: 13px;
+    }
+
+    .attendance-filter-body {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        padding: 24px;
+    }
+
+    .filter-field {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 7px;
+        min-width: 0;
+    }
+
+    .filter-field label {
+        color: #444;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .filter-field .filter-select,
+    .filter-field .filter-date {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .filter-field-row {
+        display: flex;
+        gap: 15px;
+    }
+
+    .attendance-filter-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        padding: 18px 24px;
+        border-top: 1px solid #eee;
+    }
+
+    @media (max-width: 900px) {
+        .filter-toolbar {
+            flex-wrap: wrap;
+        }
+
+        .filter-toolbar .export-spacer {
+            display: none;
+        }
+
+        .export-buttons {
+            margin-left: auto;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .search-toolbar {
+            flex-wrap: wrap;
+        }
+
+        .search-toolbar .search-container {
+            flex-basis: 100%;
+        }
+
+        .filter-toolbar {
+            align-items: stretch;
+        }
+
+        .sort-select {
+            flex: 1;
+            width: auto;
+            min-width: 170px;
+        }
+
+        .export-buttons {
+            flex-basis: 100%;
+            justify-content: flex-start;
+        }
+
+        .filter-field-row {
+            flex-direction: column;
+        }
+
+        .attendance-filter-header,
+        .attendance-filter-body,
+        .attendance-filter-footer {
+            padding-left: 18px;
+            padding-right: 18px;
+        }
     }
 
     .attendance-table-container {
@@ -424,62 +633,6 @@
         border: 1px solid #ddd;
         border-radius: 7px;
         object-fit: contain;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-
-    .detail-proof-image:hover {
-        opacity: 0.9;
-    }
-
-    .proof-image-modal {
-        display: none;
-        position: fixed;
-        inset: 0;
-        z-index: 10000;
-        align-items: center;
-        justify-content: center;
-        box-sizing: border-box;
-        padding: 50px;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.8);
-    }
-
-    .proof-image-modal.active {
-        display: flex;
-    }
-
-    .proof-large-image {
-        display: block;
-        width: auto;
-        height: auto;
-        max-width: calc(100vw - 120px);
-        max-height: calc(100vh - 120px);
-        object-fit: contain;
-        border-radius: 8px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-    }
-
-    .proof-image-close {
-        position: absolute;
-        top: 20px;
-        right: 25px;
-        width: 45px;
-        height: 45px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.9);
-        color: #333;
-        font-size: 20px;
-        cursor: pointer;
-        z-index: 10001;
-    }
-
-    .proof-image-close:hover {
-        background-color: white;
     }
 
     .detail-proof-link {
@@ -511,257 +664,8 @@
         .notification-item,
         .notification-modal-footer,
         .pengajuan-detail {
-            flex: 1;
-            min-height: 0;
-            padding: 28px 32px;
-            overflow-y: auto;
-        }
-    }
-
-    .pagination-container {
-        position: relative;
-        width: 100%;
-        margin-top: 20px;
-        min-height: 40px;
-        margin-bottom: 20px;
-    }
-
-    .pagination-buttons {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .pagination-info {
-        position: absolute;
-        left: calc(50% + 150px);
-        top: 50%;
-        transform: translateY(-50%);
-        white-space: nowrap;
-    }
-
-    .pagination-button {
-        min-width: 38px;
-        height: 38px;
-        padding: 0 10px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        background: white;
-        color: #374151;
-        font-size: 14px;
-        text-decoration: none;
-        transition: 0.2s;
-    }
-
-    .pagination-button:hover:not(.disabled):not(.active) {
-        border-color: #2563eb;
-        color: #2563eb;
-    }
-
-    .pagination-button.active {
-        background: #2563eb;
-        border-color: #2563eb;
-        color: white;
-        font-weight: 600;
-    }
-
-    .pagination-button.disabled {
-        color: #c4c4c4;
-        background: #f9fafb;
-        cursor: not-allowed;
-    }
-    
-
-    @media (max-width: 600px) {
-        .pagination-container {
-            justify-content: center;
-        }
-
-        .pagination-info {
-            width: 100%;
-            text-align: center;
-        }
-    }
-
-    .presensi-detail-content {
-        width: 600px;
-        max-width: calc(100% - 40px);
-        height: 80vh;
-        max-height: calc(100vh - 40px);
-        display: flex;
-        flex-direction: column;
-        background-color: white;
-        border-radius: 10px;
-        overflow: hidden;
-    }
-
-    .detail-button {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        padding: 9px 14px;
-        border: none;
-        border-radius: 7px;
-        background-color: #2563eb;
-        color: white;
-        font-family: 'Poppins', sans-serif;
-        font-size: 14px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-
-    .detail-button:hover {
-        background-color: #1d4ed8;
-    }
-
-    .presensi-detail-content .detail-row {
-        margin-bottom: 22px;
-    }
-
-    .presensi-detail-content .detail-row:last-child {
-        margin-bottom: 0;
-    }
-
-    @media (max-width: 700px) {
-        .presensi-detail-content {
-            width: calc(100% - 30px);
-            max-width: none;
-            height: 80vh;
-            max-height: calc(100vh - 30px);
-        }
-    
-    @media (max-width: 600px) {
-        .proof-image-modal {
-            padding: 60px 20px 20px;
-        }
-
-        .proof-large-image {
-            max-width: calc(100vw - 40px);
-            max-height: calc(100vh - 80px);
-        }
-
-        .proof-image-close {
-            top: 12px;
-            right: 12px;
-        }
-    }
-}
-    
-    .sortable-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        height: 100%;
-        color: inherit;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .sortable-header:hover {
-        color: inherit;
-        text-decoration: none;
-    }
-
-    .sortable-header i {
-        margin-left: 8px;
-        font-size: 12px;
-    }
-
-    .sortable-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        height: 100%;
-        min-height: 40px;
-        color: inherit;
-        text-decoration: none;
-        cursor: pointer;
-        box-sizing: border-box;
-    }
-
-    .export-buttons {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 40px;
-    }
-
-    .export-button {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 16px;
-        border-radius: 7px;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 500;
-        transition: 0.2s;
-    }
-
-    .export-pdf {
-        background-color: #dc3545;
-        color: white;
-    }
-
-    .export-pdf:hover {
-        background-color: #c82333;
-        color: white;
-    }
-
-    .export-excel {
-        background-color: #198754;
-        color: white;
-    }
-
-    .export-excel:hover {
-        background-color: #157347;
-        color: white;
-    }
-
-    .filter-export-row {
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        gap: 20px;
-        width: 100%;
-    }
-
-    .filter-form {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .filter-controls {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-
-    .export-buttons {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-shrink: 0;
-        margin: 0 0 0 auto;
-        padding-bottom: 0;
-        transform: translateY(-1px);
-    }
-
-    @media (max-width: 900px) {
-        .filter-export-row {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .export-buttons {
-            justify-content: flex-start;
+            padding-left: 20px;
+            padding-right: 20px;
         }
     }
 </style>
@@ -775,103 +679,6 @@
         <p class="welcome-text">
             Selamat Datang, {{ Auth::user()->name }}
         </p>
-    </div>
-
-    <div
-        id="presensiDetailModal"
-        class="notification-modal">
-        <div class="presensi-detail-content">
-
-            <div class="notification-modal-header">
-                <h2>Detail Presensi</h2>
-
-                <button
-                    type="button"
-                    class="notification-close"
-                    onclick="closePresensiDetail()">
-                    ×
-                </button>
-            </div>
-
-            <div class="pengajuan-detail">
-
-                <div class="detail-row">
-                    <span>Nama</span>
-                    <strong id="presensiDetailName">-</strong>
-                </div>
-
-                <div class="detail-row">
-                    <span>Tanggal</span>
-                    <strong id="presensiDetailDate">-</strong>
-                </div>
-
-                <div class="detail-row">
-                    <span>Masuk</span>
-                    <strong id="presensiDetailCheckIn">-</strong>
-                </div>
-
-                <div class="detail-row">
-                    <span>Pulang</span>
-                    <strong id="presensiDetailCheckOut">-</strong>
-                </div>
-
-                <div class="detail-row">
-                    <span>Status</span>
-                    <strong id="presensiDetailStatus">-</strong>
-                </div>
-
-                <div class="detail-row">
-                    <span>Keterangan</span>
-                    <strong id="presensiDetailNote">-</strong>
-                </div>
-
-                <div class="detail-row">
-                    <span>Bukti</span>
-
-                    <div id="presensiDetailProof" class="detail-proof">
-                        <span id="presensiNoProof" class="no-proof">
-                            Tidak ada bukti dilampirkan.
-                        </span>
-
-                        <img
-                            id="presensiDetailProofImage"
-                            class="detail-proof-image"
-                            src=""
-                            alt="Bukti presensi"
-                            style="display: none;"
-                            onclick="openPresensiProof()">
-                    </div>
-                </div>
-            </div>
-
-            <div class="notification-modal-footer">
-                <button
-                    type="button"
-                    class="back-button"
-                    onclick="closePresensiDetail()">
-                    Tutup
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div
-        id="presensiProofModal"
-        class="proof-image-modal"
-        onclick="closePresensiProof()">
-        <button
-            type="button"
-            class="proof-image-close"
-            onclick="closePresensiProof()">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-
-        <img
-            id="presensiProofLargeImage"
-            class="proof-large-image"
-            src=""
-            alt="Bukti presensi"
-            onclick="event.stopPropagation()">
     </div>
 
     @if(auth()->user()->role === 'admin')
@@ -889,6 +696,7 @@
 </div>
 
 <div class="summary-container">
+
     <div class="summary-card">
         <h3>Hadir</h3>
         <p>{{ $summary['hadir'] ?? 0 }}</p>
@@ -925,72 +733,144 @@
     <div class="filter-container">
         <div class="filter-export-row">
             <form method="GET" action="{{ route('dashboard') }}" class="filter-form">
-                @if(auth()->user()->role === 'admin')
-                    <div class="search-container">
-                        <input
-                            type="text"
-                            name="search"
-                            class="search-input"
-                            placeholder="Cari nama pegawai..."
-                            value="{{ request('search') }}">
-                    </div>
-                @endif
 
-                <div class="filter-controls">
-                    <select name="status" class="filter-select">
-                        <option value="">Semua Status</option>
+                {{-- Baris pertama: pencarian nama --}}
+                <div class="search-toolbar">
+                    @if(auth()->user()->role === 'admin')
+                        <div class="search-container">
+                            <input
+                                type="text"
+                                name="search"
+                                class="search-input"
+                                placeholder="Cari nama pegawai..."
+                                value="{{ request('search') }}">
+                        </div>
 
-                        <option value="hadir"
-                            {{ request('status') === 'hadir' ? 'selected' : '' }}>
-                            Hadir
+                        <button type="submit" class="filter-button">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            Cari
+                        </button>
+
+                        <a href="{{ route('dashboard') }}" class="reset-button">
+                            Reset
+                        </a>
+                    @else
+                        <span class="search-toolbar-spacer"></span>
+                    @endif
+                </div>
+
+                {{-- Baris kedua: filter, sorting, dan export --}}
+                <div class="filter-toolbar">
+                    <button
+                        type="button"
+                        class="filter-modal-button"
+                        onclick="openAttendanceFilter()">
+                        <i class="fa-solid fa-filter"></i>
+                        Filter
+                    </button>
+
+                    <select name="sort" class="filter-select sort-select" onchange="this.form.submit()">
+                        <option value="date_desc" {{ request('sort', 'date_desc') === 'date_desc' ? 'selected' : '' }}>
+                            Tanggal: Terbaru → Terlama
                         </option>
-
-                        <option value="terlambat"
-                            {{ request('status') === 'terlambat' ? 'selected' : '' }}>
-                            Terlambat
+                        <option value="date_asc" {{ request('sort') === 'date_asc' ? 'selected' : '' }}>
+                            Tanggal: Terlama → Terbaru
                         </option>
-
-                        <option value="sakit"
-                            {{ request('status') === 'sakit' ? 'selected' : '' }}>
-                            Sakit
-                        </option>
-
-                        <option value="izin"
-                            {{ request('status') === 'izin' ? 'selected' : '' }}>
-                            Izin
-                        </option>
+                        @if(auth()->user()->role === 'admin')
+                            <option value="name_asc" {{ request('sort') === 'name_asc' ? 'selected' : '' }}>
+                                Nama: A → Z
+                            </option>
+                            <option value="name_desc" {{ request('sort') === 'name_desc' ? 'selected' : '' }}>
+                                Nama: Z → A
+                            </option>
+                        @endif
                     </select>
 
-                    <input
-                        type="date"
-                        name="date"
-                        class="filter-date"
-                        value="{{ request('date') }}">
-
-                    <button type="submit" class="filter-button">
-                        Cari
-                    </button>
-                    <a
-                        href="{{ route('dashboard') }}"
-                        class="reset-button">
-                        Reset
-                    </a>
+                    <span class="export-spacer"></span>
 
                     @if(auth()->user()->role === 'admin')
                         <div class="export-buttons">
-                            <a href="{{ route('presensi.export.pdf', request()->query()) }}"
-                            class="export-button export-pdf">
+                            <a href="{{ route('presensi.export.pdf', request()->query()) }}" class="export-button export-pdf">
                                 <i class="fa-solid fa-file-pdf"></i>
                                 Export PDF
                             </a>
-
-                            <a href="{{ route('presensi.export.excel', request()->query()) }}"
-                            class="export-button export-excel">
+                            <a href="{{ route('presensi.export.excel', request()->query()) }}" class="export-button export-excel">
                                 <i class="fa-solid fa-file-excel"></i>
                                 Export Excel
                             </a>
                         </div>
                     @endif
+                </div>
+
+                {{-- Modal Filter: tetap di dalam form agar semua parameter terkirim bersama --}}
+                <div
+                    id="attendanceFilterModal"
+                    class="attendance-filter-modal"
+                    aria-hidden="true">
+
+                    <div class="attendance-filter-content" role="dialog" aria-modal="true" aria-labelledby="attendanceFilterTitle">
+                        <div class="attendance-filter-header">
+                            <div>
+                                <h2 id="attendanceFilterTitle">Filter Data Presensi</h2>
+                                <p>Pilih kriteria untuk menyaring data presensi.</p>
+                            </div>
+                            <button type="button" class="notification-close" onclick="closeAttendanceFilter()" aria-label="Tutup modal">×</button>
+                        </div>
+
+                        <div class="attendance-filter-body">
+                            <div class="filter-field">
+                                <label for="status">Status</label>
+                                <select name="status" id="status" class="filter-select">
+                                    <option value="">Semua Status</option>
+                                    <option value="hadir" {{ request('status') === 'hadir' ? 'selected' : '' }}>Hadir</option>
+                                    <option value="terlambat" {{ request('status') === 'terlambat' ? 'selected' : '' }}>Terlambat</option>
+                                    <option value="sakit" {{ request('status') === 'sakit' ? 'selected' : '' }}>Sakit</option>
+                                    <option value="izin" {{ request('status') === 'izin' ? 'selected' : '' }}>Izin</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-field-row">
+                                <div class="filter-field">
+                                    <label for="month">Bulan</label>
+                                    <select name="month" id="month" class="filter-select">
+                                        <option value="">Semua Bulan</option>
+                                        @foreach([1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'] as $number => $monthName)
+                                            <option value="{{ $number }}" {{ (string) request('month') === (string) $number ? 'selected' : '' }}>{{ $monthName }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="filter-field">
+                                    <label for="year">Tahun</label>
+                                    <select name="year" id="year" class="filter-select">
+                                        <option value="">Semua Tahun</option>
+                                        @foreach(($years ?? collect()) as $year)
+                                            <option value="{{ $year }}" {{ (string) request('year') === (string) $year ? 'selected' : '' }}>{{ $year }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="filter-field">
+                                <label>Rentang Tanggal</label>
+                                <div class="filter-field-row">
+                                    <div class="filter-field">
+                                        <label for="date_from">Tanggal Mulai</label>
+                                        <input type="date" name="date_from" id="date_from" class="filter-date" value="{{ request('date_from') }}">
+                                    </div>
+                                    <div class="filter-field">
+                                        <label for="date_to">Tanggal Akhir</label>
+                                        <input type="date" name="date_to" id="date_to" class="filter-date" value="{{ request('date_to') }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="attendance-filter-footer">
+                            <button type="button" class="back-button" onclick="closeAttendanceFilter()">Tutup</button>
+                            <button type="submit" class="filter-button">Terapkan Filter</button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -998,82 +878,17 @@
 
     <div class="attendance-table-container">
 
-        @php
-            $currentSortBy = request('sort_by', 'date');
-            $currentSort = request('sort', 'desc');
-
-            $nextNameSort = ($currentSortBy === 'name' && $currentSort === 'asc')
-                ? 'desc'
-                : 'asc';
-
-            $nextDateSort = ($currentSortBy === 'date' && $currentSort === 'asc')
-                ? 'desc'
-                : 'asc';
-        @endphp
-
         <table class="attendance-table">
-            @php
-                $currentSortBy = request('sort_by', 'date');
-                $currentSort = request('sort', 'desc');
-
-                $nextNameSort = ($currentSortBy === 'name' && $currentSort === 'asc')
-                    ? 'desc'
-                    : 'asc';
-
-                $nextDateSort = ($currentSortBy === 'date' && $currentSort === 'asc')
-                    ? 'desc'
-                    : 'asc';
-            @endphp
-
             <thead>
                 <tr>
                     @if(auth()->user()->role === 'admin')
-                        <th>
-                            <a
-                                href="{{ request()->fullUrlWithQuery([
-                                    'sort_by' => 'name',
-                                    'sort' => $nextNameSort,
-                                    'page' => 1
-                                ]) }}"
-                                class="sortable-header">
-                                <span>Nama</span>
-
-                                @if($currentSortBy === 'name')
-                                    @if($currentSort === 'asc')
-                                        <i class="fa-solid fa-arrow-up"></i>
-                                    @else
-                                        <i class="fa-solid fa-arrow-down"></i>
-                                    @endif
-                                @endif
-                            </a>
-                        </th>
+                        <th>Nama</th>
                     @endif
-
-                    <th>
-                        <a
-                            href="{{ request()->fullUrlWithQuery([
-                                'sort_by' => 'date',
-                                'sort' => $nextDateSort,
-                                'page' => 1
-                            ]) }}"
-                            class="sortable-header">
-                            <span>Tanggal</span>
-
-                            @if($currentSortBy === 'date')
-                                @if($currentSort === 'asc')
-                                    <i class="fa-solid fa-arrow-up"></i>
-                                @else
-                                    <i class="fa-solid fa-arrow-down"></i>
-                                @endif
-                            @endif
-                        </a>
-                    </th>
-
+                    <th>Tanggal</th>
                     <th>Masuk</th>
                     <th>Pulang</th>
                     <th>Status</th>
                     <th>Keterangan</th>
-                    <th>Aksi</th>
                 </tr>
             </thead>
 
@@ -1111,28 +926,11 @@
                         <td>
                             {{ $presensi->note ?? '-' }}
                         </td>
-
-                        <td>
-                            <button
-                                type="button"
-                                class="detail-button"
-                                onclick="openPresensiDetail(this)"
-                                data-name="{{ auth()->user()->role === 'admin' ? $presensi->user->name : auth()->user()->name }}"
-                                data-date="{{ $presensi->date->format('d-m-Y') }}"
-                                data-check-in="{{ $presensi->check_in ?? '-' }}"
-                                data-check-out="{{ $presensi->check_out ?? '-' }}"
-                                data-status="{{ ucfirst($presensi->status ?? '-') }}"
-                                data-note="{{ $presensi->note ?? '-' }}"
-                                data-bukti="{{ $presensi->PengajuanDiterima()?->bukti ?? '' }}">
-                                <i class="fa-solid fa-eye"></i>
-                                Detail
-                            </button>
-                        </td>
                     </tr>
                 @empty
                     <tr>
                         <td
-                            colspan="{{ auth()->user()->role === 'admin' ? 7 : 6 }}"
+                            colspan="{{ auth()->user()->role === 'admin' ? 6 : 5 }}"
                             class="empty-data">
                             Tidak ada data presensi ditemukan.
                         </td>
@@ -1140,47 +938,6 @@
                 @endforelse
             </tbody>
         </table>
-        @if($presensis->hasPages())
-        <div class="pagination-container">
-            <div class="pagination-info">
-                Menampilkan {{ $presensis->firstItem() }}
-                – {{ $presensis->lastItem() }}
-                dari {{ $presensis->total() }} data
-            </div>
-
-            <div class="pagination-buttons">
-                {{-- Previous page --}}
-                @if($presensis->onFirstPage())
-                    <span class="pagination-button disabled">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </span>
-                @else
-                    <a href="{{ $presensis->previousPageUrl() }}"
-                    class="pagination-button">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </a>
-                @endif
-
-                @foreach($presensis->getUrlRange(1, $presensis->lastPage()) as $page => $url)
-                    <a href="{{ $url }}"
-                    class="pagination-button {{ $presensis->currentPage() === $page ? 'active' : '' }}">
-                        {{ $page }}
-                    </a>
-                @endforeach
-
-                @if($presensis->hasMorePages())
-                    <a href="{{ $presensis->nextPageUrl() }}"
-                    class="pagination-button">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                @else
-                    <span class="pagination-button disabled">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </span>
-                @endif
-            </div>
-        </div>
-    @endif
     </div>
 </div>
 
@@ -1473,6 +1230,12 @@ window.addEventListener('click', function(event) {
     const detailModal =
         document.getElementById('pengajuanDetailModal');
 
+    const attendanceFilterModal =
+        document.getElementById('attendanceFilterModal');
+
+    if (event.target === attendanceFilterModal) {
+        closeAttendanceFilter();
+    }
 
     if (event.target === notificationModal) {
         closeNotificationModal();
@@ -1484,78 +1247,18 @@ window.addEventListener('click', function(event) {
 
 });
 
-function openPresensiDetail(button) {
-    document.getElementById('presensiDetailName').textContent =
-        button.dataset.name;
-
-    document.getElementById('presensiDetailDate').textContent =
-        button.dataset.date;
-
-    document.getElementById('presensiDetailCheckIn').textContent =
-        button.dataset.checkIn;
-
-    document.getElementById('presensiDetailCheckOut').textContent =
-        button.dataset.checkOut;
-
-    document.getElementById('presensiDetailStatus').textContent =
-        button.dataset.status;
-
-    document.getElementById('presensiDetailNote').textContent =
-        button.dataset.note;
-
-    const proofImage =
-    document.getElementById('presensiDetailProofImage');
-
-    const noProof =
-        document.getElementById('presensiNoProof');
-
-    if (button.dataset.bukti) {
-        const proofUrl =
-            '{{ asset('storage') }}/' + button.dataset.bukti;
-
-        proofImage.src = proofUrl;
-        proofImage.style.display = 'block';
-        noProof.style.display = 'none';
-
-    } else {
-        proofImage.src = '';
-        proofImage.style.display = 'none';
-        noProof.style.display = 'inline';
-    }
-    
-    document
-        .getElementById('presensiDetailModal')
-        .classList.add('active');
+function openAttendanceFilter() {
+    const modal = document.getElementById('attendanceFilterModal');
+    if (!modal) return;
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
 }
 
-function openPresensiProof() {
-    const image =
-        document.getElementById('presensiDetailProofImage');
-
-    const largeImage =
-        document.getElementById('presensiProofLargeImage');
-
-    if (!image.src) {
-        return;
-    }
-
-    largeImage.src = image.src;
-
-    document
-        .getElementById('presensiProofModal')
-        .classList.add('active');
+function closeAttendanceFilter() {
+    const modal = document.getElementById('attendanceFilterModal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
 }
 
-function closePresensiDetail() {
-    document
-        .getElementById('presensiDetailModal')
-        .classList.remove('active');
-}
-
-function closePresensiProof() {
-    document
-        .getElementById('presensiProofModal')
-        .classList.remove('active');
-}
 </script>
-

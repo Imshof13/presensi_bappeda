@@ -67,8 +67,10 @@
         </p>
 
         <p>
-            <strong>Filter Tanggal:</strong>
-            {{ $filters['date'] ?: 'Semua' }}
+            <strong>Rentang Tanggal:</strong>
+            {{ $filters['date_from'] ?: 'Awal' }}
+            sampai
+            {{ $filters['date_to'] ?: 'Akhir' }}
         </p>
     </div>
 

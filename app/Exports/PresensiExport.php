@@ -23,22 +23,65 @@ class PresensiExport implements FromCollection, WithHeadings, WithEvents
     {
         $query = Presensi::with('user');
 
+        // Search employee name
         if ($this->request->filled('search')) {
             $query->whereHas('user', function ($q) {
-                $q->where('name', 'like', '%' . $this->request->search . '%');
+                $q->where(
+                    'name',
+                    'like',
+                    '%' . $this->request->search . '%'
+                );
             });
         }
 
+        // Filter status
         if ($this->request->filled('status')) {
             $query->where('status', $this->request->status);
         }
+        
+        // Filter tanggal
+        if ($this->request->filled('month')) {
+            $query->whereMonth('date', $this->request->month    );
+        }
 
-        if ($this->request->filled('date')) {
-            $query->whereDate('date', $this->request->date);
+        if ($this->request->filled('year')) {
+            $query->whereYear('date', $this->request->year);
+        }
+
+        if ($this->request->filled('date_from')) {
+            $query->where('date', '>=', $this->request->date_from);
+        }
+
+        if ($this->request->filled('date_to')) {
+            $query->where('date', '<=', $this->request->date_to);
+        }
+
+        // Sorting
+        $sort = $this->request->input('sort', 'date_desc');
+
+        if ($sort === 'name_asc' || $sort === 'name_desc') {
+
+            $direction = $sort === 'name_asc' ? 'asc' : 'desc';
+
+            $query
+                ->join('users', 'presensis.user_id', '=', 'users.id')
+                ->select('presensis.*')
+                ->orderBy('users.name', $direction);
+
+        } elseif ($sort === 'date_asc') {
+
+            $query
+                ->orderBy('presensis.date', 'asc')
+                ->orderBy('presensis.id', 'asc');
+
+        } else {
+
+            $query
+                ->orderBy('presensis.date', 'desc')
+                ->orderBy('presensis.id', 'desc');
         }
 
         return $query
-            ->orderByDesc('date')
             ->get()
             ->map(function ($presensi) {
                 return [
@@ -83,10 +126,12 @@ class PresensiExport implements FromCollection, WithHeadings, WithEvents
                         ? ucfirst($this->request->input('status'))
                         : 'Semua'
                 );
-                $event->sheet->setCellValue('A4', 'Filter Tanggal');
+                $event->sheet->setCellValue('A4', 'Rentang Tanggal');
                 $event->sheet->setCellValue(
                     'B4',
-                    $this->request->input('date') ?: 'Semua'
+                    ($this->request->input('date_from') ?: 'Awal') .
+                    ' sampai ' .
+                    ($this->request->input('date_to') ?: 'Akhir')
                 );
             },
         ];
