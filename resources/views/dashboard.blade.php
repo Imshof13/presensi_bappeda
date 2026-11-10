@@ -93,6 +93,13 @@
         border-color: #087cf0;
     }
 
+    .filter-row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
     .filter-select,
     .filter-date {
         padding: 12px 14px;
@@ -139,222 +146,6 @@
 
     .reset-button:hover {
         background-color: #f5f5f5;
-    }
-
-    /* Toolbar filter: dua baris */
-    .filter-export-row {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        width: 100%;
-    }
-
-    .filter-form {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        width: 100%;
-    }
-
-    .search-toolbar,
-    .filter-toolbar {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        width: 100%;
-    }
-
-    .search-toolbar .search-container {
-        flex: 1;
-        min-width: 0;
-        margin-bottom: 0;
-    }
-
-    .search-toolbar .search-input {
-        width: 100%;
-    }
-
-    .search-toolbar .filter-button,
-    .search-toolbar .reset-button,
-    .filter-modal-button {
-        flex-shrink: 0;
-        white-space: nowrap;
-    }
-
-    .filter-modal-button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 12px 18px;
-        border: 1px solid #ccc;
-        border-radius: 7px;
-        background-color: white;
-        color: #444;
-        font-family: 'Poppins', sans-serif;
-        font-size: 15px;
-        cursor: pointer;
-    }
-
-    .filter-modal-button:hover {
-        background-color: #f5f5f5;
-    }
-
-    .sort-select {
-        width: 240px;
-        max-width: 100%;
-        flex-shrink: 0;
-    }
-
-    .export-buttons {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 10px;
-        margin-left: auto;
-        flex-shrink: 0;
-    }
-
-    .filter-toolbar .export-spacer {
-        flex: 1;
-    }
-
-    /* Modal filter presensi */
-    .attendance-filter-modal {
-        display: none;
-        position: fixed;
-        inset: 0;
-        z-index: 2000;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        background: rgba(0, 0, 0, 0.45);
-    }
-
-    .attendance-filter-modal.active {
-        display: flex;
-    }
-
-    .attendance-filter-content {
-        display: flex;
-        flex-direction: column;
-        width: 520px;
-        max-width: 100%;
-        max-height: 90vh;
-        overflow-y: auto;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
-    }
-
-    .attendance-filter-header {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        padding: 24px;
-        border-bottom: 1px solid #eee;
-    }
-
-    .attendance-filter-header h2 {
-        margin: 0;
-        font-size: 20px;
-        font-weight: 600;
-    }
-
-    .attendance-filter-header p {
-        margin: 5px 0 0;
-        color: #777;
-        font-size: 13px;
-    }
-
-    .attendance-filter-body {
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-        padding: 24px;
-    }
-
-    .filter-field {
-        display: flex;
-        flex: 1;
-        flex-direction: column;
-        gap: 7px;
-        min-width: 0;
-    }
-
-    .filter-field label {
-        color: #444;
-        font-size: 14px;
-        font-weight: 500;
-    }
-
-    .filter-field .filter-select,
-    .filter-field .filter-date {
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    .filter-field-row {
-        display: flex;
-        gap: 15px;
-    }
-
-    .attendance-filter-footer {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-        padding: 18px 24px;
-        border-top: 1px solid #eee;
-    }
-
-    @media (max-width: 900px) {
-        .filter-toolbar {
-            flex-wrap: wrap;
-        }
-
-        .filter-toolbar .export-spacer {
-            display: none;
-        }
-
-        .export-buttons {
-            margin-left: auto;
-        }
-    }
-
-    @media (max-width: 600px) {
-        .search-toolbar {
-            flex-wrap: wrap;
-        }
-
-        .search-toolbar .search-container {
-            flex-basis: 100%;
-        }
-
-        .filter-toolbar {
-            align-items: stretch;
-        }
-
-        .sort-select {
-            flex: 1;
-            width: auto;
-            min-width: 170px;
-        }
-
-        .export-buttons {
-            flex-basis: 100%;
-            justify-content: flex-start;
-        }
-
-        .filter-field-row {
-            flex-direction: column;
-        }
-
-        .attendance-filter-header,
-        .attendance-filter-body,
-        .attendance-filter-footer {
-            padding-left: 18px;
-            padding-right: 18px;
-        }
     }
 
     .attendance-table-container {
@@ -668,6 +459,333 @@
             padding-right: 20px;
         }
     }
+
+
+    /* Toolbar filter dua baris */
+    .filter-export-row {
+        position: relative;
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .filter-form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .search-toolbar,
+    .filter-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .search-toolbar .search-container {
+        flex: 1;
+        min-width: 0;
+        margin-bottom: 0;
+    }
+
+    .search-toolbar .search-input {
+        width: 100%;
+    }
+
+    .search-toolbar .filter-button,
+    .search-toolbar .reset-button,
+    .filter-modal-button,
+    .sort-select {
+        min-height: 48px;
+        box-sizing: border-box;
+        white-space: nowrap;
+    }
+
+    .filter-modal-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 7px;
+        background-color: #087cf0;
+        color: #fff;
+        font-family: 'Poppins', sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .filter-modal-button:hover {
+        background-color: #066bd0;
+    }
+
+    .sort-control {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .sort-control label {
+        font-size: 14px;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .sort-select {
+        min-width: 220px;
+    }
+
+    .export-buttons {
+        position: static;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        margin: 0 0 0 auto;
+        flex-shrink: 0;
+    }
+
+    .export-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        border-radius: 7px;
+        color: #fff;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .export-pdf {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .export-pdf:hover {
+        background-color: #c82333;
+        color: #fff;
+    }
+
+    .export-excel {
+        background-color: #198754;
+    }
+
+    .export-excel:hover {
+        background-color: #157347;
+        color: #fff;
+    }
+
+    /* Modal filter */
+    .attendance-filter-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.45);
+    }
+
+    .attendance-filter-modal.active {
+        display: flex;
+    }
+
+    .attendance-filter-content {
+        width: 520px;
+        max-width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    .attendance-filter-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 22px 24px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .attendance-filter-header h2 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .attendance-filter-header p {
+        margin: 5px 0 0;
+        color: #777;
+        font-size: 13px;
+    }
+
+    .attendance-filter-body {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        padding: 24px;
+    }
+
+    .filter-field {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 7px;
+        min-width: 0;
+    }
+
+    .filter-field label {
+        color: #444;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .filter-field .filter-select,
+    .filter-field .filter-date {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .filter-field-row {
+        display: flex;
+        gap: 15px;
+    }
+
+    .attendance-filter-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        padding: 18px 24px;
+        border-top: 1px solid #eee;
+    }
+
+    /* Pagination - mengikuti tampilan awal di GitHub */
+    .pagination-container {
+        position: relative;
+        width: 100%;
+        min-height: 40px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .pagination-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .pagination-info {
+        position: absolute;
+        left: calc(50% + 150px);
+        top: 50%;
+        transform: translateY(-50%);
+        white-space: nowrap;
+        font-size: 13px;
+        color: #555;
+    }
+
+    .pagination-button {
+        min-width: 38px;
+        height: 38px;
+        padding: 0 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: #fff;
+        color: #374151;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .pagination-button:hover:not(.disabled):not(.active) {
+        border-color: #2563eb;
+        color: #2563eb;
+    }
+
+    .pagination-button.active {
+        background: #2563eb;
+        border-color: #2563eb;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .pagination-button.disabled {
+        color: #c4c4c4;
+        background: #f9fafb;
+        cursor: not-allowed;
+    }
+
+    @media (max-width: 600px) {
+        .pagination-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pagination-info {
+            position: static;
+            transform: none;
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .filter-toolbar {
+            flex-wrap: wrap;
+            padding-right: 0;
+        }
+
+        .export-buttons {
+            justify-content: flex-end;
+            margin-left: auto;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .search-toolbar {
+            flex-wrap: wrap;
+        }
+
+        .search-toolbar .search-container {
+            flex-basis: 100%;
+        }
+
+        .filter-toolbar,
+        .filter-field-row {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .sort-control {
+            flex-wrap: wrap;
+        }
+
+        .sort-select {
+            width: 100%;
+        }
+
+        .export-buttons {
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            margin-left: 0;
+        }
+    }
+
 </style>
 
 <div class="dashboard-header">
@@ -733,8 +851,7 @@
     <div class="filter-container">
         <div class="filter-export-row">
             <form method="GET" action="{{ route('dashboard') }}" class="filter-form">
-
-                {{-- Baris pertama: pencarian nama --}}
+                {{-- Baris pertama: pencarian --}}
                 <div class="search-toolbar">
                     @if(auth()->user()->role === 'admin')
                         <div class="search-container">
@@ -745,21 +862,17 @@
                                 placeholder="Cari nama pegawai..."
                                 value="{{ request('search') }}">
                         </div>
-
-                        <button type="submit" class="filter-button">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            Cari
-                        </button>
-
-                        <a href="{{ route('dashboard') }}" class="reset-button">
-                            Reset
-                        </a>
-                    @else
-                        <span class="search-toolbar-spacer"></span>
                     @endif
+
+                    <button type="submit" class="filter-button">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        Cari
+                    </button>
+
+                    <a href="{{ route('dashboard') }}" class="reset-button">Atur Ulang</a>
                 </div>
 
-                {{-- Baris kedua: filter, sorting, dan export --}}
+                {{-- Baris kedua: filter dan sorting --}}
                 <div class="filter-toolbar">
                     <button
                         type="button"
@@ -769,52 +882,52 @@
                         Filter
                     </button>
 
-                    <select name="sort" class="filter-select sort-select" onchange="this.form.submit()">
-                        <option value="date_desc" {{ request('sort', 'date_desc') === 'date_desc' ? 'selected' : '' }}>
-                            Tanggal: Terbaru → Terlama
-                        </option>
-                        <option value="date_asc" {{ request('sort') === 'date_asc' ? 'selected' : '' }}>
-                            Tanggal: Terlama → Terbaru
-                        </option>
-                        @if(auth()->user()->role === 'admin')
-                            <option value="name_asc" {{ request('sort') === 'name_asc' ? 'selected' : '' }}>
-                                Nama: A → Z
+                    <div class="sort-control">
+                        <label for="sort">Urutkan:</label>
+                        <select
+                            name="sort"
+                            id="sort"
+                            class="filter-select sort-select"
+                            onchange="this.form.submit()">
+                            <option value="date_desc" {{ request('sort', 'date_desc') === 'date_desc' ? 'selected' : '' }}>
+                                Terbaru
                             </option>
-                            <option value="name_desc" {{ request('sort') === 'name_desc' ? 'selected' : '' }}>
-                                Nama: Z → A
+                            <option value="date_asc" {{ request('sort') === 'date_asc' ? 'selected' : '' }}>
+                                Terlama
                             </option>
-                        @endif
-                    </select>
+                            @if(auth()->user()->role === 'admin')
+                                <option value="name_asc" {{ request('sort') === 'name_asc' ? 'selected' : '' }}>
+                                    A ke Z
+                                </option>
+                                <option value="name_desc" {{ request('sort') === 'name_desc' ? 'selected' : '' }}>
+                                    Z ke A
+                                </option>
+                            @endif
+                        </select>
+                    </div>
 
-                    <span class="export-spacer"></span>
-
+                    {{-- Tombol ekspor sejajar dengan Filter dan Urutkan --}}
                     @if(auth()->user()->role === 'admin')
                         <div class="export-buttons">
                             <a href="{{ route('presensi.export.pdf', request()->query()) }}" class="export-button export-pdf">
-                                <i class="fa-solid fa-file-pdf"></i>
-                                Export PDF
+                                <i class="fa-solid fa-file-pdf"></i> Ekspor PDF
                             </a>
                             <a href="{{ route('presensi.export.excel', request()->query()) }}" class="export-button export-excel">
-                                <i class="fa-solid fa-file-excel"></i>
-                                Export Excel
+                                <i class="fa-solid fa-file-excel"></i> Ekspor Excel
                             </a>
                         </div>
                     @endif
                 </div>
 
-                {{-- Modal Filter: tetap di dalam form agar semua parameter terkirim bersama --}}
-                <div
-                    id="attendanceFilterModal"
-                    class="attendance-filter-modal"
-                    aria-hidden="true">
-
+                {{-- Modal filter: tetap di dalam form agar nilainya terkirim --}}
+                <div id="attendanceFilterModal" class="attendance-filter-modal" aria-hidden="true">
                     <div class="attendance-filter-content" role="dialog" aria-modal="true" aria-labelledby="attendanceFilterTitle">
                         <div class="attendance-filter-header">
                             <div>
                                 <h2 id="attendanceFilterTitle">Filter Data Presensi</h2>
                                 <p>Pilih kriteria untuk menyaring data presensi.</p>
                             </div>
-                            <button type="button" class="notification-close" onclick="closeAttendanceFilter()" aria-label="Tutup modal">×</button>
+                            <button type="button" class="notification-close" onclick="closeAttendanceFilter()" aria-label="Tutup">&times;</button>
                         </div>
 
                         <div class="attendance-filter-body">
@@ -839,7 +952,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-
                                 <div class="filter-field">
                                     <label for="year">Tahun</label>
                                     <select name="year" id="year" class="filter-select">
@@ -873,6 +985,7 @@
                     </div>
                 </div>
             </form>
+
         </div>
     </div>
 
@@ -939,6 +1052,40 @@
             </tbody>
         </table>
     </div>
+
+    @if(method_exists($presensis, 'hasPages') && $presensis->hasPages())
+        <div class="pagination-container">
+            <div class="pagination-buttons">
+                {{-- Sebelumnya --}}
+                @if ($presensis->onFirstPage())
+                    <span class="pagination-button disabled">&laquo; Sebelumnya</span>
+                @else
+                    <a class="pagination-button" href="{{ $presensis->previousPageUrl() }}">&laquo; Sebelumnya</a>
+                @endif
+
+                {{-- Nomor halaman --}}
+                @for ($page = 1; $page <= $presensis->lastPage(); $page++)
+                    @if ($page == $presensis->currentPage())
+                        <span class="pagination-button active">{{ $page }}</span>
+                    @else
+                        <a class="pagination-button" href="{{ $presensis->url($page) }}">{{ $page }}</a>
+                    @endif
+                @endfor
+
+                {{-- Berikutnya --}}
+                @if ($presensis->hasMorePages())
+                    <a class="pagination-button" href="{{ $presensis->nextPageUrl() }}">Berikutnya &raquo;</a>
+                @else
+                    <span class="pagination-button disabled">Berikutnya &raquo;</span>
+                @endif
+            </div>
+
+            <div class="pagination-info">
+                Menampilkan {{ $presensis->firstItem() ?? 0 }} sampai {{ $presensis->lastItem() ?? 0 }}
+                dari {{ $presensis->total() }} data
+            </div>
+        </div>
+    @endif
 </div>
 
 @if(auth()->user()->role === 'admin')
@@ -1135,6 +1282,22 @@
 @endsection
 
 <script>
+function openAttendanceFilter() {
+    const modal = document.getElementById('attendanceFilterModal');
+    if (modal) {
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+    }
+}
+
+function closeAttendanceFilter() {
+    const modal = document.getElementById('attendanceFilterModal');
+    if (modal) {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+    }
+}
+
     function openNotificationModal() {
 
     document
@@ -1229,7 +1392,6 @@ window.addEventListener('click', function(event) {
 
     const detailModal =
         document.getElementById('pengajuanDetailModal');
-
     const attendanceFilterModal =
         document.getElementById('attendanceFilterModal');
 
@@ -1246,19 +1408,11 @@ window.addEventListener('click', function(event) {
     }
 
 });
-
-function openAttendanceFilter() {
-    const modal = document.getElementById('attendanceFilterModal');
-    if (!modal) return;
-    modal.classList.add('active');
-    modal.setAttribute('aria-hidden', 'false');
-}
-
-function closeAttendanceFilter() {
-    const modal = document.getElementById('attendanceFilterModal');
-    if (!modal) return;
-    modal.classList.remove('active');
-    modal.setAttribute('aria-hidden', 'true');
-}
-
+window.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeAttendanceFilter();
+        if (document.getElementById('notificationModal')) closeNotificationModal();
+        if (document.getElementById('pengajuanDetailModal')) closePengajuanDetail();
+    }
+});
 </script>
