@@ -235,20 +235,7 @@ Pengajuan memiliki tiga status:
 
 Alur pengajuan:
 
-``` text
-User mengirim pengajuan
-          |
-          v
-   Status: Pending
-          |
-          v
-   Admin memeriksa
-          |
-     +----+----+
-     |         |
-     v         v
- Diterima   Ditolak
-```
+User mengirim pengajuan -> Status: Pending -> Admin memeriksa -> Diterima/Ditolak
 
 Pengajuan yang masih berstatus pending dapat dibatalkan oleh user.
 Pengajuan yang masih pending atau sudah diterima juga menjadi dasar
@@ -261,23 +248,23 @@ pembatasan presensi pada tanggal pengajuan tersebut.
 Aplikasi menyediakan empat akun demo untuk mencoba fitur berdasarkan
 role masing-masing.
 
-**Password seluruh akun demo: `password123`**
+**Password seluruh akun demo: `password`**
 
 -   **Username:** `admin`\
     **Role:** Admin\
-    **Password:** `password123`
+    **Password:** `password`
 
 -   **Username:** `imshof`\
     **Role:** User\
-    **Password:** `password123`
+    **Password:** `password`
 
 -   **Username:** `yuslih`\
     **Role:** User\
-    **Password:** `password123`
+    **Password:** `password`
 
 -   **Username:** `rahmat`\
     **Role:** User\
-    **Password:** `password123`
+    **Password:** `password`
 
 ### Penggunaan Akun
 
