@@ -1151,17 +1151,22 @@
                         @endif
                     </div>
 
-                    {{-- Tombol ekspor sejajar dengan Filter dan Urutkan --}}
-                    @if(auth()->user()->role === 'admin')
-                        <div class="export-buttons">
-                            <a href="{{ route('presensi.export.pdf', request()->query()) }}" class="export-button export-pdf">
-                                <i class="fa-solid fa-file-pdf"></i> Ekspor PDF
-                            </a>
-                            <a href="{{ route('presensi.export.excel', request()->query()) }}" class="export-button export-excel">
-                                <i class="fa-solid fa-file-excel"></i> Ekspor Excel
-                            </a>
-                        </div>
-                    @endif
+                    {{-- Tombol ekspor--}}
+                    <div class="export-buttons">
+                        <a
+                            href="{{ route('presensi.export.pdf', request()->except(['page', 'notification_page'])) }}"
+                            class="export-button export-pdf">
+                            <i class="fa-solid fa-file-pdf"></i>
+                            Ekspor PDF
+                        </a>
+
+                        <a
+                            href="{{ route('presensi.export.excel', request()->except(['page', 'notification_page'])) }}"
+                            class="export-button export-excel">
+                            <i class="fa-solid fa-file-excel"></i>
+                            Ekspor Excel
+                        </a>
+                    </div>
                 </div>
 
                 {{-- Modal filter: tetap di dalam form agar nilainya terkirim --}}
@@ -1324,7 +1329,19 @@
                         </td>
 
                         <td>
-                            {{ $presensi->note ?? '-' }}
+                            @if($presensi->check_in && $presensi->check_out)
+                                @php
+                                    $totalMenitKerja = (int) \Carbon\Carbon::parse($presensi->check_in)
+                                        ->diffInMinutes(\Carbon\Carbon::parse($presensi->check_out));
+                                    $jamKerja = intdiv($totalMenitKerja, 60);
+                                    $sisaMenitKerja = $totalMenitKerja % 60;
+                                @endphp
+                                {{ $jamKerja }} jam {{ $sisaMenitKerja }} menit
+                            @elseif($presensi->check_in)
+                                Belum selesai
+                            @else
+                                {{ $presensi->note ?? '-' }}
+                            @endif
                         </td>
                     </tr>
                 @empty

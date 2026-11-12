@@ -160,20 +160,14 @@
     }
 
     .notice-close-button {
-        padding: 11px 18px;
         border: none;
-        border-radius: 7px;
-        background-color: #2563eb;
-        color: white;
-        font-family: 'Poppins', sans-serif;
-        font-size: 14px;
+        background: #2563eb;
+        color: #fff;
         font-weight: 500;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
     }
 
     .notice-close-button:hover {
-        background-color: #1d4ed8;
+        background: #1d4ed8;
     }
 
     .notice-modal-content {
@@ -1056,7 +1050,19 @@
                     </p>
 
                     <p class="info-value">
-                        {{ $presensi?->note ?? '-' }}
+                        @if($presensi?->check_in && $presensi?->check_out)
+                            @php
+                                $totalMenitKerja = (int) \Carbon\Carbon::parse($presensi->check_in)
+                                    ->diffInMinutes(\Carbon\Carbon::parse($presensi->check_out));
+                                $jamKerja = intdiv($totalMenitKerja, 60);
+                                $sisaMenitKerja = $totalMenitKerja % 60;
+                            @endphp
+                            {{ $jamKerja }} jam {{ $sisaMenitKerja }} menit
+                        @elseif($presensi?->check_in)
+                            Belum selesai
+                        @else
+                            {{ $presensi?->note ?? '-' }}
+                        @endif
                     </p>
 
                 </div>

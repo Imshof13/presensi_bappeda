@@ -8,125 +8,55 @@ use Illuminate\Database\Seeder;
 
 class PresensiSeeder extends Seeder
 {
-    //
     public function run(): void
     {
-        $imshof = User::where('username', 'imshof')->first();
-        $yuslih = User::where('username', 'yuslih')->first();
-        $rahmat = User::where('username', 'rahmat')->first();
+        $users = User::where('role', 'user')->orderBy('id')->get();
 
-        // Presensi imshof
+        if ($users->isEmpty()) {
+            return;
+        }
 
-        Presensi::create([
-            'user_id' => $imshof->id,
-            'date' => '2026-09-14',
-            'check_in' => '07:15:00',
-            'check_out' => '17:00:00',
-            'status' => 'hadir',
-            'note' => null,
-        ]);
+        $statuses = ['hadir', 'terlambat', 'hadir', 'izin', 'sakit', 'hadir', 'terlambat'];
+        $notes = [
+            null,
+            null,
+            'Keluar 15 menit lebih cepat',
+            'Mengajukan izin',
+            'Sakit',
+            null,
+            'Terlambat karena kendala perjalanan',
+        ];
 
-        Presensi::create([
-            'user_id' => $imshof->id,
-            'date' => '2026-09-15',
-            'check_in' => '07:45:00',
-            'check_out' => '17:00:00',
-            'status' => 'terlambat',
-            'note' => null,
-        ]);
+        // Buat 50 data presensi. Tanggal dan user dibuat berbeda agar
+        // tidak melanggar unique constraint (user_id, date).
+        for ($i = 0; $i < 50; $i++) {
+            $user = $users[$i % $users->count()];
+            $date = now()->subDays($i)->toDateString();
+            $statusIndex = $i % count($statuses);
+            $status = $statuses[$statusIndex];
 
-        Presensi::create([
-            'user_id' => $imshof->id,
-            'date' => '2026-09-16',
-            'check_in' => '07:20:00',
-            'check_out' => '16:45:00',
-            'status' => 'hadir',
-            'note' => 'Keluar 15 menit lebih cepat',
-        ]);
+            $checkIn = match ($status) {
+                'hadir' => ['07:05:00', '07:15:00', '07:25:00'][$i % 3],
+                'terlambat' => ['07:35:00', '07:45:00', '08:00:00'][$i % 3],
+                default => null,
+            };
 
-        Presensi::create([
-            'user_id' => $imshof->id,
-            'date' => '2026-09-17',
-            'check_in' => null,
-            'check_out' => null,
-            'status' => 'izin',
-            'note' => 'Mengajukan izin',
-        ]);
+            $checkOut = in_array($status, ['hadir', 'terlambat'], true)
+                ? ['16:45:00', '17:00:00', '17:10:00'][$i % 3]
+                : null;
 
-        // Presensi Yuslih
-
-        Presensi::create([
-            'user_id' => $yuslih->id,
-            'date' => '2026-09-14',
-            'check_in' => '07:10:00',
-            'check_out' => '17:00:00',
-            'status' => 'hadir',
-            'note' => null,
-        ]);
-
-        Presensi::create([
-            'user_id' => $yuslih->id,
-            'date' => '2026-09-15',
-            'check_in' => '07:50:00',
-            'check_out' => '17:10:00',
-            'status' => 'terlambat',
-            'note' => 'Keluar lebih lama 10 menit',
-        ]);
-
-        Presensi::create([
-            'user_id' => $yuslih->id,
-            'date' => '2026-09-16',
-            'check_in' => null,
-            'check_out' => null,
-            'status' => 'sakit',
-            'note' => 'Sakit',
-        ]);
-
-        Presensi::create([
-            'user_id' => $yuslih->id,
-            'date' => '2026-09-17',
-            'check_in' => '07:25:00',
-            'check_out' => '17:00:00',
-            'status' => 'hadir',
-            'note' => null,
-        ]);
-
-        // Presensi Rahmat
-
-        Presensi::create([
-            'user_id' => $rahmat->id,
-            'date' => '2026-09-14',
-            'check_in' => '07:20:00',
-            'check_out' => '17:00:00',
-            'status' => 'hadir',
-            'note' => null,
-        ]);
-
-        Presensi::create([
-            'user_id' => $rahmat->id,
-            'date' => '2026-09-15',
-            'check_in' => '07:35:00',
-            'check_out' => '17:00:00',
-            'status' => 'terlambat',
-            'note' => null,
-        ]);
-
-        Presensi::create([
-            'user_id' => $rahmat->id,
-            'date' => '2026-09-16',
-            'check_in' => null,
-            'check_out' => null,
-            'status' => 'izin',
-            'note' => 'Keperluan pribadi',
-        ]);
-
-        Presensi::create([
-            'user_id' => $rahmat->id,
-            'date' => '2026-09-17',
-            'check_in' => '07:15:00',
-            'check_out' => '17:00:00',
-            'status' => 'hadir',
-            'note' => null,
-        ]);
+            Presensi::updateOrCreate(
+                [
+                    'user_id' => $user->id,
+                    'date' => $date,
+                ],
+                [
+                    'check_in' => $checkIn,
+                    'check_out' => $checkOut,
+                    'status' => $status,
+                    'note' => $notes[$statusIndex],
+                ]
+            );
+        }
     }
 }

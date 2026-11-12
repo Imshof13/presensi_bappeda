@@ -18,10 +18,16 @@ class DashboardController extends Controller
 
         $pendingPengajuan = 0;
         $pengajuans = collect();
-        $years = Presensi::selectRaw('YEAR(date) as year')
-            ->distinct()
-            ->orderByDesc('year')
-            ->pluck('year');
+        $yearsQuery = Presensi::query();
+            if ($user->role !== 'admin') {
+                $yearsQuery->where('user_id', $user->id);
+            }
+
+            $years = $yearsQuery
+                ->selectRaw('YEAR(date) as year')
+                ->distinct()
+                ->orderByDesc('year')
+                ->pluck('year');
 
         // Validate date range
         $request->validate([
@@ -187,30 +193,34 @@ class DashboardController extends Controller
 
     public function exportExcel(Request $request)
     {
+        $user = Auth::user();
+
+        // Admin: seluruh data
+        // User: hanya data miliknya
+        $userId = $user->role === 'admin' ? null : $user->id;
+
         return Excel::download(
-            new PresensiExport($request),
+            new PresensiExport($request, $userId),
             'laporan-presensi.xlsx'
         );
     }
 
     public function exportPdf(Request $request)
     {
+        $user = Auth::user();
+
         $query = Presensi::with('user');
 
-        // Search name
-        if ($request->filled('search')) {
-            $query->whereHas('user', function ($q) use ($request) {
-                $q->where(
-                    'name',
-                    'like',
-                    '%' . $request->search . '%'
-                );
-            });
+        // Batasi data untuk user biasa
+        if ($user->role !== 'admin') {
+            $query->where('user_id', $user->id);
         }
 
-        // Filter status
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
+        // Search nama hanya untuk admin
+        if ($user->role === 'admin' && $request->filled('search')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%');
+            });
         }
 
         // Filter status
@@ -240,8 +250,7 @@ class DashboardController extends Controller
         // Sorting
         $sort = $request->input('sort', 'date_desc');
 
-        if ($sort === 'name_asc' || $sort === 'name_desc') {
-
+        if ($user->role === 'admin' && in_array($sort, ['name_asc', 'name_desc'])) {
             $direction = $sort === 'name_asc' ? 'asc' : 'desc';
 
             $query
@@ -249,17 +258,12 @@ class DashboardController extends Controller
                 ->select('presensis.*')
                 ->orderBy('users.name', $direction);
 
-        } elseif ($sort === 'date_asc') {
-
-            $query
-                ->orderBy('presensis.date', 'asc')
-                ->orderBy('presensis.id', 'asc');
-
         } else {
+            $direction = $sort === 'date_asc' ? 'asc' : 'desc';
 
             $query
-                ->orderBy('presensis.date', 'desc')
-                ->orderBy('presensis.id', 'desc');
+                ->orderBy('presensis.date', $direction)
+                ->orderBy('presensis.id', $direction);
         }
 
         $presensis = $query->get();
@@ -267,7 +271,9 @@ class DashboardController extends Controller
         $pdf = Pdf::loadView('pdf.presensi', [
             'presensis' => $presensis,
             'filters' => [
-                'search' => $request->input('search'),
+                'search' => $user->role === 'admin'
+                    ? $request->input('search')
+                    : null,
                 'status' => $request->input('status'),
                 'month' => $request->input('month'),
                 'year' => $request->input('year'),

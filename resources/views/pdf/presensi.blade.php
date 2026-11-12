@@ -115,7 +115,23 @@
                     </td>
 
                     <td>
-                        {{ $presensi->note ?? '-' }}
+                    @php
+                    $keterangan = '-';
+
+                    if ($presensi->check_in && $presensi->check_out) {
+                        $totalMenit = \Carbon\Carbon::parse($presensi->check_in)
+                            ->diffInMinutes(\Carbon\Carbon::parse($presensi->check_out));
+
+                        $jam = intdiv($totalMenit, 60);
+                        $menit = $totalMenit % 60;
+
+                        $keterangan = "{$jam} jam {$menit} menit";
+                    } elseif ($presensi->check_in && !$presensi->check_out) {
+                        $keterangan = 'Belum selesai';
+                    }
+                    @endphp
+
+                    {{ $keterangan }}
                     </td>
                 </tr>
             @empty

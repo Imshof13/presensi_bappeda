@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Presensi;
 use App\Models\Pengajuan;
+use App\Exports\PresensiExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PresensiController extends Controller
 {
@@ -176,5 +179,73 @@ class PresensiController extends Controller
         return back()->with('success', 'Presensi pulang berhasil.');
     }
 
+    public function exportExcel(Request $request)
+    {
+        $user = Auth::user();
 
+        if ($user->role !== 'user') {
+            abort(403);
+        }
+
+        return Excel::download(
+            new PresensiExport($request, $user->id),
+            'laporan-presensi-' . $user->name . '.xlsx'
+        );
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->role !== 'user') {
+            abort(403);
+        }
+
+        $query = Presensi::where('user_id', $user->id)
+            ->with('user');
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('month')) {
+            $query->whereMonth('date', $request->month);
+        }
+
+        if ($request->filled('year')) {
+            $query->whereYear('date', $request->year);
+        }
+
+        if ($request->filled('date_from')) {
+            $query->where('date', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->where('date', '<=', $request->date_to);
+        }
+
+        $sort = $request->input('sort', 'date_desc');
+        $direction = $sort === 'date_asc' ? 'asc' : 'desc';
+
+        $presensis = $query
+            ->orderBy('date', $direction)
+            ->orderBy('id', $direction)
+            ->get();
+
+        $pdf = Pdf::loadView('pdf.presensi', [
+            'presensis' => $presensis,
+            'filters' => [
+                'search' => null,
+                'status' => $request->input('status'),
+                'month' => $request->input('month'),
+                'year' => $request->input('year'),
+                'date_from' => $request->input('date_from'),
+                'date_to' => $request->input('date_to'),
+            ],
+        ]);
+
+        return $pdf
+            ->setPaper('a4', 'landscape')
+            ->download('laporan-presensi-' . $user->name . '.pdf');
+    }
 }

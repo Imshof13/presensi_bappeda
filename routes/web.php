@@ -27,6 +27,16 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
+Route::delete('/pengajuan/{pengajuan}/cancel', [PengajuanController::class, 'cancel'])
+    ->name('pengajuan.cancel');
+
+// Export
+Route::get('/presensi/export/excel', [DashboardController::class, 'exportExcel'])
+    ->name('presensi.export.excel');
+
+Route::get('/presensi/export/pdf', [DashboardController::class, 'exportPdf'])
+    ->name('presensi.export.pdf');
+
 // User
 Route::middleware('auth')->group(function () {
 
@@ -45,9 +55,6 @@ Route::middleware('auth')->group(function () {
     // pengajuan
     Route::post('/pengajuan', [PengajuanController::class, 'store'])
         ->name('pengajuan.store');
-    
-    Route::delete('/pengajuan/{pengajuan}/cancel', [PengajuanController::class, 'cancel'])
-    ->name('pengajuan.cancel');
 });
 
 // Admin
@@ -58,12 +65,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::patch('/pengajuan/{pengajuan}/reject', [PengajuanController::class, 'reject'])
         ->name('pengajuan.reject');
-    
-    Route::get('/presensi/export/excel', [DashboardController::class, 'exportExcel'])
-        ->name('presensi.export.excel');
-
-    Route::get('/presensi/export/pdf', [DashboardController::class, 'exportPdf'])
-        ->name('presensi.export.pdf');
 });
 
 

@@ -10,45 +10,40 @@ class PengajuanSeeder extends Seeder
 {
     public function run(): void
     {
-        $imshof = User::where('username', 'imshof')->first();
-        $yuslis = User::where('username', 'yuslih')->first();
-        $rahmat = User::where('username', 'rahmat')->first();
+        $users = User::where('role', 'user')->orderBy('id')->get();
         $admin = User::where('username', 'admin')->first();
 
-        // Pengajuan Imshof
-        Pengajuan::create([
-            'user_id' => $imshof->id,
-            'tanggal' => '2026-09-17',
-            'mengajukan' => 'izin',
-            'alasan' => 'Ada keperluan keluarga.',
-            'bukti' => null,
-            'status' => 'pending',
-            'dicek_oleh' => null,
-            'dicek_saat' => null,
-        ]);
+        if ($users->isEmpty()) {
+            return;
+        }
 
-        // Pengajuan Yuslih
-        Pengajuan::create([
-            'user_id' => $yuslis->id,
-            'tanggal' => '2026-09-16',
-            'mengajukan' => 'sakit',
-            'alasan' => 'Sedang kurang sehat.',
-            'bukti' => null,
-            'status' => 'diterima',
-            'dicek_oleh' => $admin->id,
-            'dicek_saat' => '2026-09-16 08:00:00',
-        ]);
+        $types = ['izin', 'sakit'];
+        $statuses = ['pending', 'diterima', 'ditolak'];
 
-        // Pengajuan Rahmat
-        Pengajuan::create([
-            'user_id' => $rahmat->id,
-            'tanggal' => '2026-09-16',
-            'mengajukan' => 'izin',
-            'alasan' => 'Ada keperluan pribadi.',
-            'bukti' => null,
-            'status' => 'ditolak',
-            'dicek_oleh' => $admin->id,
-            'dicek_saat' => '2026-09-16 08:15:00',
-        ]);
+        // Buat 50 data pengajuan dengan kombinasi jenis dan status.
+        for ($i = 0; $i < 50; $i++) {
+            $user = $users[$i % $users->count()];
+            $status = $statuses[$i % count($statuses)];
+            $type = $types[$i % count($types)];
+
+            $reviewed = $status !== 'pending';
+
+            Pengajuan::updateOrCreate(
+                [
+                    'user_id' => $user->id,
+                    'tanggal' => now()->subDays($i + 60)->toDateString(),
+                ],
+                [
+                    'mengajukan' => $type,
+                    'alasan' => $type === 'sakit'
+                        ? 'Sedang kurang sehat dan perlu beristirahat.'
+                        : 'Ada keperluan pribadi/keluarga.',
+                    'bukti' => null,
+                    'status' => $status,
+                    'dicek_oleh' => $reviewed ? $admin?->id : null,
+                    'dicek_saat' => $reviewed ? now()->subDays($i)->setTime(8, 0) : null,
+                ]
+            );
+        }
     }
 }
