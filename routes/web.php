@@ -45,6 +45,9 @@ Route::middleware('auth')->group(function () {
     // pengajuan
     Route::post('/pengajuan', [PengajuanController::class, 'store'])
         ->name('pengajuan.store');
+    
+    Route::delete('/pengajuan/{pengajuan}/cancel', [PengajuanController::class, 'cancel'])
+    ->name('pengajuan.cancel');
 });
 
 // Admin

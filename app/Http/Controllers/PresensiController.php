@@ -11,14 +11,21 @@ use App\Models\Pengajuan;
 class PresensiController extends Controller
 {
     //
+    private function hasActivePengajuan($userId, $tanggal)
+    {
+        return Pengajuan::where('user_id', $userId)
+            ->whereDate('tanggal', $tanggal)
+            ->whereIn('status', ['pending', 'diterima'])
+            ->exists();
+    }
     public function index()
     {
         $user = Auth::user();
             if ($user->role === 'admin') {
-
                 $pengajuans = Pengajuan::with('user')
                     ->latest('created_at')
-                    ->get();
+                    ->paginate(10, ['*'], 'pengajuan_page')
+                    ->withQueryString();
 
                 return view('presensi', compact('pengajuans'));
             }
@@ -39,13 +46,24 @@ class PresensiController extends Controller
         $presensi = Presensi::where('user_id', $user->id)
             ->where('date', today())
             ->first();
+        
+        $riwayatPengajuan = Pengajuan::where('user_id', $user->id)
+            ->latest('created_at')
+            ->get();
 
-        return view('presensi', compact('presensi'));
+        return view('presensi', compact('presensi', 'riwayatPengajuan'));   
     }
 
     public function checkIn()
     {
         $user = Auth::user();
+
+        if ($this->hasActivePengajuan($user->id, today())) {
+            return back()->with(
+                'error',
+                'Anda tidak dapat melakukan presensi karena sudah mengajukan izin atau sakit pada tanggal ini.'
+            );
+        }
 
         // Validasi user sudah check in
         $presensi = Presensi::where('user_id', $user->id)
@@ -82,6 +100,13 @@ class PresensiController extends Controller
     public function checkOut()
     {
         $user = Auth::user();
+
+        if ($this->hasActivePengajuan($user->id, today())) {
+            return back()->with(
+                'error',
+                'Anda tidak dapat melakukan presensi karena sudah mengajukan izin atau sakit pada tanggal ini.'
+            );
+        }
 
         $presensi = Presensi::where('user_id', $user->id)
             ->where('date', today())

@@ -129,7 +129,8 @@ class DashboardController extends Controller
             $pengajuans = Pengajuan::with('user')
                 ->where('status', 'pending')
                 ->latest('created_at')
-                ->get();
+                ->paginate(5, ['*'], 'notification_page')
+                ->withQueryString();
 
         // User
         } else {

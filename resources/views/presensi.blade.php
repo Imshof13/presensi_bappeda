@@ -52,6 +52,160 @@
         opacity: 0.9;
     }
 
+    .riwayat-button {
+        padding: 12px 18px;
+        border: 1px solid #2563eb;
+        border-radius: 7px;
+        background: #fff;
+        color: #2563eb;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .riwayat-button:hover {
+        background: #eff6ff;
+    }
+
+    .user-header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .history-modal-content {
+        width: 760px;
+        max-width: calc(100% - 32px);
+        max-height: 85vh;
+        overflow-y: auto;
+        padding: 26px;
+        box-sizing: border-box;
+        background: #fff;
+        border-radius: 10px;
+    }
+
+    .history-modal-header,
+    .notice-modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+    }
+
+    .history-modal-header h2,
+    .notice-modal-header h2 {
+        margin: 0;
+        font-size: 21px;
+        font-weight: 600;
+    }
+
+    .history-empty {
+        padding: 28px 12px;
+        color: #777;
+        text-align: center;
+    }
+
+    .history-table-wrap {
+        overflow-x: auto;
+    }
+
+    .history-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+    }
+
+    .history-table th,
+    .history-table td {
+        padding: 12px 10px;
+        border-bottom: 1px solid #eee;
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    .history-table th {
+        background: #f7f9fc;
+        color: #526071;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .history-cancel-button {
+        padding: 7px 11px;
+        border: 1px solid #dc3545;
+        border-radius: 6px;
+        background: #fff;
+        color: #dc3545;
+        font-family: 'Poppins', sans-serif;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .history-cancel-button:hover {
+        background: #fff1f2;
+    }
+
+    .history-close-button,
+    .notice-close-button {
+        padding: 9px 16px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        background: #fff;
+        color: #374151;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+    }
+
+    .notice-close-button {
+        padding: 11px 18px;
+        border: none;
+        border-radius: 7px;
+        background-color: #2563eb;
+        color: white;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .notice-close-button:hover {
+        background-color: #1d4ed8;
+    }
+
+    .notice-modal-content {
+        width: 430px;
+        max-width: calc(100% - 32px);
+        padding: 28px;
+        box-sizing: border-box;
+        background: #fff;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 15px 45px rgba(0, 0, 0, .18);
+    }
+
+    .notice-modal-content h2 {
+        margin: 0 0 12px;
+        color: #172033;
+        font-size: 21px;
+        font-weight: 600;
+    }
+
+    .notice-modal-content p {
+        margin: 0 0 22px;
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .notice-modal-actions {
+        display: flex;
+        justify-content: center;
+    }
+
     .presensi-card {
         width: 100%;
         box-sizing: border-box;
@@ -238,6 +392,47 @@
     .admin-pengajuan-table-container {
         width: 100%;
         overflow-x: auto;
+    }
+
+    .admin-pengajuan-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 16px;
+        border-top: 1px solid #eee;
+    }
+
+    .admin-pengajuan-page-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 34px;
+        min-height: 34px;
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        color: #333;
+        background: #fff;
+        font-size: 13px;
+        text-decoration: none;
+    }
+
+    .admin-pengajuan-page-link.active {
+        color: #fff;
+        background: #2563eb;
+        border-color: #2563eb;
+    }
+
+    .admin-pengajuan-page-link:hover:not(.disabled):not(.active) {
+        background: #f1f5f9;
+    }
+
+    .admin-pengajuan-page-link.disabled {
+        color: #aaa;
+        background: #f8f8f8;
+        cursor: not-allowed;
     }
 
     .admin-pengajuan-table {
@@ -588,133 +783,9 @@
         .attendance-actions {
             grid-template-columns: 1fr;
         }
-    }
 
-    .alert-popup {
-        position: fixed;
-        top: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 9999;
-
-        min-width: 350px;
-        max-width: 500px;
-        padding: 16px 20px;
-
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-
-        display: flex;
-        align-items: flex-start;
-        gap: 12px;
-
-        animation: alertSlideDown 0.3s ease;
-    }
-
-    .alert-popup.success {
-        border-left: 5px solid #22c55e;
-    }
-
-    .alert-popup.error {
-        border-left: 5px solid #ef4444;
-    }
-
-    .alert-popup-icon {
-        font-size: 20px;
-        margin-top: 2px;
-    }
-
-    .alert-popup.success .alert-popup-icon {
-        color: #22c55e;
-    }
-
-    .alert-popup.error .alert-popup-icon {
-        color: #ef4444;
-    }
-
-    .alert-popup-content {
-        flex: 1;
-    }
-
-    .alert-popup-title {
-        font-size: 15px;
-        font-weight: 600;
-        margin-bottom: 4px;
-    }
-
-    .alert-popup-message {
-        font-size: 15px;
-        color: #555;
-    }
-
-    .alert-popup-close {
-        border: none;
-        background: none;
-        font-size: 18px;
-        color: #777;
-        cursor: pointer;
-    }
-
-    .alert-popup-close:hover {
-        color: #333;
-    }
-
-    @keyframes alertSlideDown {
-        from {
-            opacity: 0;
-            transform: translate(-50%, -20px);
-        }
-        to {
-            opacity: 1;
-            transform: translate(-50%, 0);
-        }
     }
 </style>
-
-@if(session('success'))
-    <div class="alert-popup success" id="alertPopup">
-        <i class="fa-solid fa-circle-check alert-popup-icon"></i>
-
-        <div class="alert-popup-content">
-            <div class="alert-popup-title">
-                Berhasil
-            </div>
-
-            <div class="alert-popup-message">
-                {{ session('success') }}
-            </div>
-        </div>
-
-        <button type="button"
-                class="alert-popup-close"
-                onclick="closeAlert()">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-    </div>
-@endif
-
-@if($errors->any())
-    <div class="alert-popup error" id="alertPopup">
-        <i class="fa-solid fa-circle-exclamation alert-popup-icon"></i>
-
-        <div class="alert-popup-content">
-            <div class="alert-popup-title">
-                Pengajuan Gagal
-            </div>
-
-            <div class="alert-popup-message">
-                {{ $errors->first() }}
-            </div>
-        </div>
-
-        <button type="button"
-                class="alert-popup-close"
-                onclick="closeAlert()">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-    </div>
-@endif
 
 <div class="presensi-header">
     <div class="presensi-header-top">
@@ -729,12 +800,21 @@
 
     @if(auth()->user()->role === 'user')
         <div class="presensi-header-bottom">
-            <button
-                type="button"
-                class="pengajuan-button"
-                onclick="openPengajuanModal()">
-                Pengajuan Izin / Sakit
-            </button>
+            <div class="user-header-actions">
+                <button
+                    type="button"
+                    class="pengajuan-button"
+                    onclick="openPengajuanModal()">
+                    Pengajuan Izin / Sakit
+                </button>
+
+                <button
+                    type="button"
+                    class="riwayat-button"
+                    onclick="openRiwayatModal()">
+                    Riwayat Pengajuan
+                </button>
+            </div>
         </div>
     @endif
 </div>
@@ -860,7 +940,6 @@
                         @empty
                             <tr>
                                 <td colspan="7" class="admin-empty">
-                                    <i class="fa-solid fa-check"></i>
                                     Tidak ada pengajuan.
                                 </td>
                             </tr>
@@ -868,6 +947,30 @@
                     </tbody>
                 </table>
             </div>
+
+            @if(isset($pengajuans) && method_exists($pengajuans, 'lastPage') && $pengajuans->lastPage() > 1)
+                <div class="admin-pengajuan-pagination">
+                    @if($pengajuans->onFirstPage())
+                        <span class="admin-pengajuan-page-link disabled">Sebelumnya</span>
+                    @else
+                        <a class="admin-pengajuan-page-link" href="{{ $pengajuans->previousPageUrl() }}">Sebelumnya</a>
+                    @endif
+
+                    @for($page = 1; $page <= $pengajuans->lastPage(); $page++)
+                        @if($page === $pengajuans->currentPage())
+                            <span class="admin-pengajuan-page-link active">{{ $page }}</span>
+                        @else
+                            <a class="admin-pengajuan-page-link" href="{{ $pengajuans->url($page) }}">{{ $page }}</a>
+                        @endif
+                    @endfor
+
+                    @if($pengajuans->hasMorePages())
+                        <a class="admin-pengajuan-page-link" href="{{ $pengajuans->nextPageUrl() }}">Berikutnya</a>
+                    @else
+                        <span class="admin-pengajuan-page-link disabled">Berikutnya</span>
+                    @endif
+                </div>
+            @endif
         </div>
 
     </div>
@@ -971,7 +1074,7 @@
                         type="submit"
                         class="attendance-button check-in-button"
                         {{ $presensi ? 'disabled' : '' }}>
-                        ✓ &nbsp; Presensi Masuk
+                        Presensi Masuk
                     </button>
 
                 </form>
@@ -985,7 +1088,7 @@
                         type="submit"
                         class="attendance-button check-out-button"
                         {{ !$presensi || $presensi->check_out ? 'disabled' : '' }}>
-                        ⇥ &nbsp; Presensi Pulang
+                        Presensi Pulang
                     </button>
 
                 </form>
@@ -1233,23 +1336,76 @@
 </div>
 @endif
 
+@if(auth()->user()->role === 'user')
+<div id="riwayatPengajuanModal" class="modal">
+    <div class="history-modal-content">
+        <div class="history-modal-header">
+            <h2>Riwayat Pengajuan</h2>
+            <button type="button" class="history-close-button" onclick="closeRiwayatModal()">Tutup</button>
+        </div>
+
+        <div class="history-table-wrap">
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Jenis</th>
+                        <th>Alasan</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse(($riwayatPengajuan ?? collect()) as $riwayat)
+                        <tr>
+                            <td>{{ $riwayat->tanggal?->format('d-m-Y') ?? '-' }}</td>
+                            <td>{{ ucfirst($riwayat->mengajukan) }}</td>
+                            <td>{{ $riwayat->alasan ?: '-' }}</td>
+                            <td>
+                                <span class="pengajuan-status pengajuan-status-{{ $riwayat->status }}">
+                                    {{ ucfirst($riwayat->status) }}
+                                </span>
+                            </td>
+                            <td>
+                                @if($riwayat->status === 'pending')
+                                    <form method="POST" action="{{ route('pengajuan.cancel', $riwayat->id) }}" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pengajuan ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="history-cancel-button">Batalkan</button>
+                                    </form>
+                                @else
+                                    <span style="color:#94a3b8;">-</span>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="history-empty">Belum ada riwayat pengajuan.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@endif
+
+@if(session('error'))
+<div id="presensiNoticeModal" class="modal active">
+    <div class="notice-modal-content">
+        <h2>Presensi Tidak Dapat Dilakukan</h2>
+        <p>{{ session('error') }}</p>
+        <div class="notice-modal-actions">
+            <button type="button" class="notice-close-button" onclick="closePresensiNotice()">Mengerti</button>
+        </div>
+    </div>
+</div>
+@endif
 
 <script>
-    function closeAlert() {
-        const alert = document.getElementById('alertPopup');
-
-        if (alert) {
-            alert.remove();
-        }
-    }
-
-    setTimeout(() => {
-        closeAlert();
-    }, 5000);
-
     function openPengajuanModal() {
         document
-            .getElementById('pengajuanModal') 
+            .getElementById('pengajuanModal')
             .classList.add('active');
     }
 
@@ -1257,6 +1413,18 @@
         document
             .getElementById('pengajuanModal')
             .classList.remove('active');
+    }
+
+    function openRiwayatModal() {
+        document.getElementById('riwayatPengajuanModal')?.classList.add('active');
+    }
+
+    function closeRiwayatModal() {
+        document.getElementById('riwayatPengajuanModal')?.classList.remove('active');
+    }
+
+    function closePresensiNotice() {
+        document.getElementById('presensiNoticeModal')?.classList.remove('active');
     }
 
     function showAdminPengajuanDetail(
@@ -1315,6 +1483,10 @@
 
         const adminDetailModal =
             document.getElementById('adminPengajuanDetailModal');
+        const riwayatModal =
+            document.getElementById('riwayatPengajuanModal');
+        const noticeModal =
+            document.getElementById('presensiNoticeModal');
 
         if (pengajuanModal && event.target === pengajuanModal) {
             closePengajuanModal();
@@ -1322,6 +1494,14 @@
 
         if (adminDetailModal && event.target === adminDetailModal) {
             closeAdminPengajuanDetail();
+        }
+
+        if (riwayatModal && event.target === riwayatModal) {
+            closeRiwayatModal();
+        }
+
+        if (noticeModal && event.target === noticeModal) {
+            closePresensiNotice();
         }
 
     });

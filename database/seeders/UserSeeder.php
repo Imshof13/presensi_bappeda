@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'name' => 'yuslis',
+            'name' => 'yuslih',
             'username' => 'yuslih',
             'password' => 'password123',
             'role' => 'user',

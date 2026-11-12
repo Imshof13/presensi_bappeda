@@ -21,8 +21,6 @@ class Presensi extends Model
     {
         return [
             'date' => 'date',
-            'check_in' => 'datetime:H:i',
-            'check_out' => 'datetime:H:i',
         ];
     }
 

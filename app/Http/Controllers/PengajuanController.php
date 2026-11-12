@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Presensi;
 
 class PengajuanController extends Controller
 {
     //
     public function store(Request $request)
-    {
+    {   
         $request->validate([
             'tanggal' => [
                 'required',
@@ -96,5 +97,26 @@ class PengajuanController extends Controller
         ]);
 
         return back()->with('success', 'Pengajuan berhasil ditolak.');
+    }
+
+    public function cancel(Pengajuan $pengajuan)
+    {
+        if ($pengajuan->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if ($pengajuan->status !== 'pending') {
+            return back()->with(
+                'error',
+                'Pengajuan hanya dapat dibatalkan selama menunggu persetujuan.'
+            );
+        }
+        if ($pengajuan->bukti) {
+        Storage::disk('public')->delete($pengajuan->bukti);
+        }
+
+        $pengajuan->delete();
+
+        return back()->with('success', 'Pengajuan berhasil dibatalkan.');
     }
 }
